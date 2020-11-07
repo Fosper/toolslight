@@ -1,0 +1,26 @@
+{
+  "name": "toolslight",
+  "version": "1.0.0",
+  "description": "Quickly and easily NodeJS tools.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fosper/toolslight.git"
+  },
+  "keywords": [
+    "tools"
+  ],
+  "author": {
+    "name": "Fosper",
+    "email": "fosper@icloud.com",
+    "url": "https://www.npmjs.com/~fosper"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fosper/toolslight/issues"
+  },
+  "homepage": "https://github.com/fosper/toolslight#readme"
+}
