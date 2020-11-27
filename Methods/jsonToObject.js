@@ -1,7 +1,7 @@
 
 const toolslight = require('../index.js')
 
-toolslight.prototype.jsonToObject = function(value) {
+toolslight.jsonToObject = function(value) {
     
     /*
         Returns object.

@@ -1,6 +1,6 @@
 const toolslight = require('../index.js')
 
-toolslight.prototype.sleep = function(ms) {
+toolslight.sleep = function(ms) {
     
     /*
         Returns promise.

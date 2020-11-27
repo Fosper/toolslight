@@ -1,6 +1,6 @@
 const toolslight = require('../index.js')
 
-toolslight.prototype.randInt = function(min, max) {
+toolslight.randInt = function(min, max) {
     
     /*
         Returns int.

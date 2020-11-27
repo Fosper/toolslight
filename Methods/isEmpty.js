@@ -1,6 +1,6 @@
 const toolslight = require('../index.js')
 
-toolslight.prototype.isEmpty = function(value) {
+toolslight.isEmpty = function(value) {
 
     /*
         Returns bool.

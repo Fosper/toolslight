@@ -1,6 +1,6 @@
 const toolslight = require('../index.js')
 
-toolslight.prototype.uniqid = function(symbCount = 13) {
+toolslight.uniqid = function(symbCount = 13) {
     
     /*
         Returns string.

@@ -2,7 +2,7 @@
 const https = require('https')
 const toolslight = require('../index.js')
 
-toolslight.prototype.post = function(url, port, path, headers, body, timeout, errorPrefix = '') {
+toolslight.post = function(url, port, path, headers, body, timeout, errorPrefix = '') {
 
   /*
 

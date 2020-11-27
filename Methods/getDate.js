@@ -1,6 +1,6 @@
 const toolslight = require('../index.js')
 
-toolslight.prototype.getDate = function(timestamp = Date.now()) {
+toolslight.getDate = function(timestamp = Date.now()) {
     
     /*
         Returns string.
