@@ -9,11 +9,15 @@ toolslight.request = function(customOptions = {}) {
     {
       request: {
         headers: (string)
+        headersSize: (number)
         body: (string)
+        bodySize: (number)
       },
       response: {
         headers: (string)
+        headersSize: (number)
         body: (string)
+        bodySize: (number)
       }
     }
 
@@ -45,7 +49,7 @@ toolslight.request = function(customOptions = {}) {
     console.log(data)
   */
 
-  return new Promise((resolve, reject) => {
+  return this.to(new Promise((resolve, reject) => {
 
     let result = {
       request: {
@@ -186,7 +190,5 @@ toolslight.request = function(customOptions = {}) {
     req.write(options.body)
 
     req.end()
-  }).then(data => {
-    return [null, data]
-  }).catch(err => [err])
+  }))
 }
