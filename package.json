@@ -22,5 +22,6 @@
   "bugs": {
     "url": "https://github.com/fosper/toolslight/issues"
   },
-  "homepage": "https://github.com/fosper/toolslight#readme"
+  "homepage": "https://github.com/fosper/toolslight#readme",
+  "dependencies": {}
 }
