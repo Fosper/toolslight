@@ -30,7 +30,7 @@ toolslight.getDate = function(date = Date.now()) {
     }
 
     timestamp = (Math.floor(timestamp / 1000))
-    timestamp = timestamp + (this.UTC * -1 * 60 * 60)
+    timestamp = timestamp + (this.UTC * 60 * 60)
     timestamp = timestamp * 1000
 
     let dt = new Date(timestamp)
@@ -44,8 +44,6 @@ toolslight.getDate = function(date = Date.now()) {
         day = '0' + day
     }
     let hour = dt.getUTCHours()
-    hour = hour + parseInt(this.UTC * -1)
-
     if (hour < 10) {
         hour = '0' + hour
     }
