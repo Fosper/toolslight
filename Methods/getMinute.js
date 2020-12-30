@@ -29,6 +29,10 @@ toolslight.getMinute = function(date = Date.now()) {
         }
     }
 
+    timestamp = (Math.floor(timestamp / 1000))
+    timestamp = timestamp + (this.UTC * -1 * 60 * 60)
+    timestamp = timestamp * 1000
+    
     let dt = new Date(timestamp)
 
     return dt.getUTCMinutes()
