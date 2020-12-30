@@ -26,7 +26,7 @@ toolslight.request = function(customOptions = {}) {
     WebSocket connect (object)
 
     Example:
-    let options = {
+    var requestOptions = {
       method: 'GET', // Can be 'GET', 'POST', 'PUT', 'DELETE', 'CONNECT'.
       protocol: 'https', // Can be 'http', 'https', 'ws', 'wss'.
       host: 'google.com',
@@ -40,19 +40,29 @@ toolslight.request = function(customOptions = {}) {
       errorPrefix: '' // Custom prefix for errors (can use project unique identifier).
     }
 
-    let err, data
-    [err, data] = await toolslight.request(options)
+    var err, data
+    [err, data] = await toolslight.request(requestOptions)
     if (err) {
       console.log(err)
       return
     }
     console.log(data)
+
+    Content-Type example:
+    application/json - if body is json
+    multipart/form-data - for file upload
+    application/x-www-form-urlencoded - if body is fields like parameter=value&also=another
   */
 
   return this.to(new Promise((resolve, reject) => {
 
     let result = {
       request: {
+        method: '',
+        protocol: '',
+        host: '',
+        port: 0,
+        path: '',
         headers: '',
         headersSize: 0,
         body: '',
@@ -72,8 +82,8 @@ toolslight.request = function(customOptions = {}) {
       host: 'google.com',
       port: 443,
       path: '/',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({field: '123'}),
+      headers: {},
+      body: '',
       timeout: 5000,
       bodySizeLimit: 10240,
       proxyHost: '',
@@ -95,10 +105,18 @@ toolslight.request = function(customOptions = {}) {
       options[option] = defaultOptions[option]
     }
     
+    result.request.method = options.method
+    result.request.protocol = options.protocol
+    result.request.host = options.host
+    result.request.port = options.port
+    result.request.path = options.path
     result.request.headers = options.headers
     result.request.headersSize = JSON.stringify(options.headers).length - 2
-    result.request.body = options.body
-    result.request.bodySize = options.body.length
+
+    if (!this.isEmpty(options.body)) {
+      result.request.body = options.body
+      result.request.bodySize = options.body.length
+    }
 
     let library
     if (options.protocol === 'https') {
@@ -213,8 +231,10 @@ toolslight.request = function(customOptions = {}) {
           reject(options.errorPrefix + err)
         })
       }
-  
-      req.write(options.body)
+      
+      if (!this.isEmpty(options.body)) {
+        req.write(options.body)
+      }
   
       req.end()
     }

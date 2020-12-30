@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/fosper/toolslight#readme",
   "dependencies": {
+    "crypto": "^1.0.1",
     "https-proxy-agent": "^5.0.0",
     "url": "^0.11.0",
     "ws": "^7.4.1"
