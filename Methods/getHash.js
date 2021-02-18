@@ -28,8 +28,3 @@ toolslight.getHash = function(customOptions = {}) {
 
     return crypto.createHash(options.type).update(options.data).digest(options.format)
 }
-
-
-
-
-

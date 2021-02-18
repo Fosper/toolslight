@@ -6,7 +6,7 @@ toolslight.to = function(promise) {
         Returns object
 
         Example without error (err will be null, data will be 'Success'):
-        let err, data
+        var err, data
         [err, data] = await toolslight.to(new Promise((resolve, reject) => {
             let a = 1
             if (a === 1) {
@@ -22,7 +22,7 @@ toolslight.to = function(promise) {
         console.log(data)
 
         Example with error (err will be 'Error!'):
-        let err, data
+        var err, data
         [err, data] = await toolslight.to(new Promise((resolve, reject) => {
             let a = 2
             if (a === 1) {

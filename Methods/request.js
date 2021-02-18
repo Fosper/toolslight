@@ -27,7 +27,7 @@ toolslight.request = function(customOptions = {}) {
 
     Example:
     var requestOptions = {
-      method: 'GET', // Can be 'GET', 'POST', 'PUT', 'DELETE', 'CONNECT'.
+      method: 'GET', // Can be 'GET', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS'
       protocol: 'https', // Can be 'http', 'https', 'ws', 'wss'.
       host: 'google.com',
       port: 443,
@@ -69,6 +69,7 @@ toolslight.request = function(customOptions = {}) {
         bodySize: 0
       },
       response: {
+        statusCode: 200,
         headers: '',
         headersSize: 0,
         body: '',
@@ -91,6 +92,7 @@ toolslight.request = function(customOptions = {}) {
       proxyUsername: '',
       proxyPassword: '',
       proxyTimeout: 5000,
+      localAddress: '',
       saveTo: '',
       errorPrefix: '' 
     }
@@ -104,7 +106,7 @@ toolslight.request = function(customOptions = {}) {
       }
       options[option] = defaultOptions[option]
     }
-    
+
     result.request.method = options.method
     result.request.protocol = options.protocol
     result.request.host = options.host
@@ -165,15 +167,20 @@ toolslight.request = function(customOptions = {}) {
       reject(options.errorPrefix + 'Toolslight (request): Incorrect protocol.')
     }
 
-    let file = {}
-    if (!this.isEmpty(options.saveTo)) {
-      file = fs.createWriteStream(options.saveTo);
-    }
+    // let file = {}
+    // if (!this.isEmpty(options.saveTo)) {
+    //   file = fs.createWriteStream(options.saveTo);
+    // }
 
     let start = (requestOptions, connect = {}) => {
       var req = library.request(requestOptions, res => {
-        res.setEncoding('utf8')
-  
+        if (!this.isEmpty(options.saveTo)) {
+          res.setEncoding('binary')
+          result.response.body = []
+        } else {
+          res.setEncoding('utf8')
+        }
+
         res.on('data', (chunk) => {
             result.response.bodySize += chunk.length
   
@@ -181,7 +188,11 @@ toolslight.request = function(customOptions = {}) {
                 res.destroy()
                 reject(options.errorPrefix + 'Toolslight (request): Response body size more than ' + options.bodySizeLimit + ' bytes.')
             } else {
-              result.response.body += chunk.toString()
+              if (!this.isEmpty(options.saveTo)) {
+                result.response.body.push(Buffer.from(chunk, 'binary'))
+              } else {
+                result.response.body += chunk.toString()
+              }
             }
         })
   
@@ -189,14 +200,28 @@ toolslight.request = function(customOptions = {}) {
             if (!this.isEmpty(connect)) {
               connect.abort()
             }
+
+            if (!this.isEmpty(options.saveTo)) {
+              let buffer = Buffer.concat(result.response.body)
+              fs.writeFile(options.saveTo, buffer, function (err) {
+                reject(options.errorPrefix + err)
+              })
+            }
+
             resolve(result);
         })
-  
-        if (!this.isEmpty(options.saveTo)) {
-          res.pipe(file)
-        }
+
+        // if (!this.isEmpty(options.saveTo)) {
+        //   res.pipe(file)
+        // }
       })
   
+      req.on('response', response => {
+        result.response.statusCode = response.statusCode
+        result.response.headers = response.headers
+        result.response.headersSize = response.headers.length
+      })
+
       req.on('timeout', () => {
         req.abort()
         if (!this.isEmpty(connect)) {
@@ -215,22 +240,22 @@ toolslight.request = function(customOptions = {}) {
         reject(options.errorPrefix + err)
       })
   
-      if (!this.isEmpty(options.saveTo)) {
-        file.on('finish', () => {
-          if (!this.isEmpty(connect)) {
-            connect.abort()
-          }
-          resolve(result)
-        })
+      // if (!this.isEmpty(options.saveTo)) {
+      //   file.on('finish', () => {
+      //     if (!this.isEmpty(connect)) {
+      //       connect.abort()
+      //     }
+      //     resolve(result)
+      //   })
   
-        file.on('error', err => {
-          fs.unlink(options.saveTo)
-          if (!this.isEmpty(connect)) {
-            connect.abort()
-          }
-          reject(options.errorPrefix + err)
-        })
-      }
+      //   file.on('error', err => {
+      //     fs.unlink(options.saveTo)
+      //     if (!this.isEmpty(connect)) {
+      //       connect.abort()
+      //     }
+      //     reject(options.errorPrefix + err)
+      //   })
+      // }
       
       if (!this.isEmpty(options.body)) {
         req.write(options.body)
@@ -248,6 +273,10 @@ toolslight.request = function(customOptions = {}) {
       timeout: options.timeout,
       rejectUnauthorized: false
       // requestCert: true
+    }
+
+    if (!this.isEmpty(options.localAddress)) {
+      requestOptions.localAddress = options.localAddress
     }
 
     if (!this.isEmpty(options.proxyHost)) {
