@@ -232,7 +232,11 @@ toolslight.request = function(customOptions = {}) {
   
       req.on('error', err => {
         if (!this.isEmpty(options.saveTo)) {
-          fs.unlink(options.saveTo)
+          try {
+            fs.unlinkSync(options.saveTo)
+          } catch(err) {
+              // console.log(err)
+          }
         }
         if (!this.isEmpty(connect)) {
           connect.abort()
