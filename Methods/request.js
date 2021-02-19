@@ -167,11 +167,6 @@ toolslight.request = function(customOptions = {}) {
       reject(options.errorPrefix + 'Toolslight (request): Incorrect protocol.')
     }
 
-    // let file = {}
-    // if (!this.isEmpty(options.saveTo)) {
-    //   file = fs.createWriteStream(options.saveTo);
-    // }
-
     let start = (requestOptions, connect = {}) => {
       var req = library.request(requestOptions, res => {
         if (!this.isEmpty(options.saveTo)) {
@@ -210,10 +205,6 @@ toolslight.request = function(customOptions = {}) {
 
             resolve(result);
         })
-
-        // if (!this.isEmpty(options.saveTo)) {
-        //   res.pipe(file)
-        // }
       })
   
       req.on('response', response => {
@@ -235,7 +226,7 @@ toolslight.request = function(customOptions = {}) {
           try {
             fs.unlinkSync(options.saveTo)
           } catch(err) {
-              // console.log(err)
+
           }
         }
         if (!this.isEmpty(connect)) {
@@ -243,23 +234,6 @@ toolslight.request = function(customOptions = {}) {
         }
         reject(options.errorPrefix + err)
       })
-  
-      // if (!this.isEmpty(options.saveTo)) {
-      //   file.on('finish', () => {
-      //     if (!this.isEmpty(connect)) {
-      //       connect.abort()
-      //     }
-      //     resolve(result)
-      //   })
-  
-      //   file.on('error', err => {
-      //     fs.unlink(options.saveTo)
-      //     if (!this.isEmpty(connect)) {
-      //       connect.abort()
-      //     }
-      //     reject(options.errorPrefix + err)
-      //   })
-      // }
       
       if (!this.isEmpty(options.body)) {
         req.write(options.body)
