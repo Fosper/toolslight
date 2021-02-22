@@ -36,6 +36,7 @@ toolslight.request = function(customOptions = {}) {
       body: JSON.stringify({field: '123'}),
       timeout: 5000, // In milliseconds (1000 = 1 second).
       bodySizeLimit: 10240,
+      bodyEncoding: 'utf8', // utf8 or binary
       saveTo: '', // If set full file path - create/replace file, and save body response to this file.
       errorPrefix: '' // Custom prefix for errors (can use project unique identifier).
     }
@@ -87,6 +88,7 @@ toolslight.request = function(customOptions = {}) {
       body: '',
       timeout: 5000,
       bodySizeLimit: 10240,
+      bodyEncoding: 'utf8',
       proxyHost: '',
       proxyPort: 8080,
       proxyUsername: '',
@@ -94,7 +96,7 @@ toolslight.request = function(customOptions = {}) {
       proxyTimeout: 5000,
       localAddress: '',
       saveTo: '',
-      errorPrefix: '' 
+      errorPrefix: ''
     }
 
     let options = {}
@@ -169,7 +171,7 @@ toolslight.request = function(customOptions = {}) {
 
     let start = (requestOptions, connect = {}) => {
       var req = library.request(requestOptions, res => {
-        if (!this.isEmpty(options.saveTo)) {
+        if (!this.isEmpty(options.saveTo) || options.bodyEncoding === 'binary') {
           res.setEncoding('binary')
           result.response.body = []
         } else {
@@ -183,7 +185,7 @@ toolslight.request = function(customOptions = {}) {
                 res.destroy()
                 reject(options.errorPrefix + 'Toolslight (request): Response body size more than ' + options.bodySizeLimit + ' bytes.')
             } else {
-              if (!this.isEmpty(options.saveTo)) {
+              if (!this.isEmpty(options.saveTo) || options.bodyEncoding === 'binary') {
                 result.response.body.push(Buffer.from(chunk, 'binary'))
               } else {
                 result.response.body += chunk.toString()
@@ -196,14 +198,20 @@ toolslight.request = function(customOptions = {}) {
               connect.abort()
             }
 
-            if (!this.isEmpty(options.saveTo)) {
-              let buffer = Buffer.concat(result.response.body)
-              fs.writeFile(options.saveTo, buffer, function (err) {
-                reject(options.errorPrefix + err)
-              })
+            if (!this.isEmpty(options.saveTo) || options.bodyEncoding === 'binary') {
+              result.response.body = Buffer.concat(result.response.body)
             }
 
-            resolve(result);
+            if (!this.isEmpty(options.saveTo)) {
+              fs.writeFile(options.saveTo, result.response.body, function (err) {
+                if (err) {
+                  reject(options.errorPrefix + err)
+                }
+                resolve(result)
+              })
+            } else {
+              resolve(result)
+            }
         })
       })
   
