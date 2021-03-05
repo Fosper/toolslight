@@ -1,6 +1,6 @@
 {
   "name": "toolslight",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Quickly and easily NodeJS tools.",
   "main": "index.js",
   "scripts": {
