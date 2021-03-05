@@ -203,12 +203,19 @@ toolslight.request = function(customOptions = {}) {
             }
 
             if (!this.isEmpty(options.saveTo)) {
-              fs.writeFile(options.saveTo, result.response.body, function (err) {
-                if (err) {
-                  reject(options.errorPrefix + err)
-                }
+              try {
+                fs.writeFileSync(options.saveTo, result.response.body)
                 resolve(result)
-              })
+              } catch (err) {
+                reject(options.errorPrefix + err)
+              }
+
+              // fs.writeFile(options.saveTo, result.response.body, function (err) {
+              //   if (err) {
+              //     reject(options.errorPrefix + err)
+              //   }
+              //   resolve(result)
+              // })
             } else {
               resolve(result)
             }
