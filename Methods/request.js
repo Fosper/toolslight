@@ -37,6 +37,12 @@ toolslight.request = function(customOptions = {}) {
       timeout: 5000, // In milliseconds (1000 = 1 second).
       bodySizeLimit: 10240,
       bodyEncoding: 'utf8', // utf8 or binary
+      proxyHost: '127.0.0.1',
+      proxyPort: 8080,
+      proxyUsername: 'kekus',
+      proxyPassword: 'mekus',
+      proxyTimeout: 5000,
+      localAddress: '1.2.3.4',
       saveTo: '', // If set full file path - create/replace file, and save body response to this file.
       errorPrefix: '' // Custom prefix for errors (can use project unique identifier).
     }
@@ -209,13 +215,6 @@ toolslight.request = function(customOptions = {}) {
               } catch (err) {
                 reject(options.errorPrefix + err)
               }
-
-              // fs.writeFile(options.saveTo, result.response.body, function (err) {
-              //   if (err) {
-              //     reject(options.errorPrefix + err)
-              //   }
-              //   resolve(result)
-              // })
             } else {
               resolve(result)
             }
@@ -225,7 +224,7 @@ toolslight.request = function(customOptions = {}) {
       req.on('response', response => {
         result.response.statusCode = response.statusCode
         result.response.headers = response.headers
-        result.response.headersSize = response.headers.length
+        result.response.headersSize = JSON.stringify(response.headers).length
       })
 
       req.on('timeout', () => {
