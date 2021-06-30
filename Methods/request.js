@@ -1,11 +1,11 @@
-const fs = require('fs')
 const toolslight = require('../index.js')
+const fs = require('fs')
 
 toolslight.request = function(customOptions = {}) {
 
   /*
 
-    Returns object:
+    Returns object for 'http' and 'https' protocols:
     {
       request: {
         headers: (string)
@@ -22,17 +22,19 @@ toolslight.request = function(customOptions = {}) {
     }
 
     OR
-    
+
+    Returns object for 'ws' and 'wss' protocol:
     WebSocket connect (object)
 
     Example:
     var requestOptions = {
-      method: 'GET', // Can be 'GET', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS'
+      method: 'GET', // Can be 'GET', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'HEAD', 'PATCH'.
       protocol: 'https', // Can be 'http', 'https', 'ws', 'wss'.
       host: 'google.com',
       port: 443,
       path: '/',
       headers: {'Content-Type': 'application/json'},
+      isBodyFile: false,
       body: JSON.stringify({field: '123'}),
       timeout: 5000, // In milliseconds (1000 = 1 second).
       bodySizeLimit: 10240,
@@ -91,6 +93,7 @@ toolslight.request = function(customOptions = {}) {
       port: 443,
       path: '/',
       headers: {},
+      isBodyFile: false,
       body: '',
       timeout: 5000,
       bodySizeLimit: 10240,
@@ -232,7 +235,7 @@ toolslight.request = function(customOptions = {}) {
         if (!this.isEmpty(connect)) {
           connect.abort()
         }
-        reject(options.errorPrefix + 'Toolslight (request): Post request timeout.')
+        reject(options.errorPrefix + 'Toolslight (request): Request timeout.')
       })
   
       req.on('error', err => {
@@ -249,11 +252,16 @@ toolslight.request = function(customOptions = {}) {
         reject(options.errorPrefix + err)
       })
       
-      if (!this.isEmpty(options.body)) {
+      if (!this.isEmpty(options.body) && !options.isBodyFile) {
         req.write(options.body)
       }
+
+      if (options.isBodyFile) {
+        fs.createReadStream(options.body).pipe(req)
+      } else {
+        req.end()
+      }
   
-      req.end()
     }
 
     let requestOptions = {
