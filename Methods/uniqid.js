@@ -12,15 +12,15 @@ toolslight.uniqid = function(customOptions = {}) {
 
     let defaultOptions = {
         symbolCount: 13,
-        letterCase: 'lower', // Default: 'lower'. Can be 'lower', 'upper', 'mixed'
+        letterCase: 'lower', // Default: 'lower'. Can be 'lower', 'upper', 'mixed'.
         lettersLib: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
         numbersLib: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         specialLib: ['!', '@', '#', '$', '%', '&', '*', '(', ')', '-', '_', '+', ':', ',', '.', ';', '[', ']', '{', '}', '<', '>'],
         customLib: [],
         lettersEnable: true,
         numbersEnable: true,
-        specialEnable: true,
-        customEnable: true
+        specialEnable: false,
+        customEnable: false
     }
 
     let options = {}
