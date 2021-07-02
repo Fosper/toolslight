@@ -210,7 +210,7 @@ toolslight.request = function(customOptions = {}) {
           output.setEncoding('utf8')
         }
 
-        res.on('data', (chunk) => {
+        output.on('data', (chunk) => {
             result.response.bodySize += chunk.length
   
             if (result.response.bodySize > options.bodySizeLimit) {
@@ -225,7 +225,7 @@ toolslight.request = function(customOptions = {}) {
             }
         })
   
-        res.on('end', () => {
+        output.on('end', () => {
             if (!this.isEmpty(connect)) {
               connect.abort()
             }
