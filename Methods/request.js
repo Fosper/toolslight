@@ -1,5 +1,6 @@
 const toolslight = require('../index.js')
 const fs = require('fs')
+const zlib = require('zlib')
 
 toolslight.request = function(customOptions = {}) {
 
@@ -180,11 +181,33 @@ toolslight.request = function(customOptions = {}) {
 
     let start = (requestOptions, connect = {}) => {
       var req = library.request(requestOptions, res => {
+        let output
+        switch (res.headers['content-encoding']) {
+            case 'br':
+                let br = zlib.createBrotliDecompress()
+                res.pipe(br)
+                output = br
+                break
+            case 'gzip':
+                let gzip = zlib.createGunzip()
+                res.pipe(gzip)
+                output = gzip
+                break
+            case 'deflate':
+                let deflate = zlib.createInflate()
+                res.pipe(deflate)
+                output = deflate
+                break
+            default:
+                output = res
+                break
+        }
+
         if (!this.isEmpty(options.saveTo) || options.bodyEncoding === 'binary') {
-          res.setEncoding('binary')
+          output.setEncoding('binary')
           result.response.body = []
         } else {
-          res.setEncoding('utf8')
+          output.setEncoding('utf8')
         }
 
         res.on('data', (chunk) => {
