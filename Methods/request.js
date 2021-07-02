@@ -111,12 +111,12 @@ toolslight.request = function(customOptions = {}) {
 
     let options = {}
 
-    for (let option of Object.keys(defaultOptions)) {
-      if (!this.isEmpty(customOptions[option])) {
-        options[option] = customOptions[option]
-        continue
+    for (const defaultOption in defaultOptions) {
+      if (Object.prototype.toString.call(defaultOptions[defaultOption]) === Object.prototype.toString.call(customOptions[defaultOption])) {
+          options[defaultOption] = customOptions[defaultOption]
+      } else {
+          options[defaultOption] = defaultOptions[defaultOption]
       }
-      options[option] = defaultOptions[option]
     }
 
     result.request.method = options.method
