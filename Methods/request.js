@@ -1,6 +1,7 @@
 const toolslight = require('../index.js')
-const fs = require('fs')
+const stream = require('stream')
 const zlib = require('zlib')
+const fs = require('fs')
 
 toolslight.request = function(customOptions = {}) {
 
@@ -35,7 +36,6 @@ toolslight.request = function(customOptions = {}) {
       port: 443,
       path: '/',
       headers: {'Content-Type': 'application/json'},
-      isBodyFile: false,
       body: JSON.stringify({field: '123'}),
       formData: {},
       timeout: 5000, // In milliseconds (1000 = 1 second).
@@ -95,7 +95,6 @@ toolslight.request = function(customOptions = {}) {
       port: 443,
       path: '/',
       headers: {},
-      isBodyFile: false,
       body: '',
       formData: {},
       timeout: 5000,
@@ -121,6 +120,61 @@ toolslight.request = function(customOptions = {}) {
       }
     }
 
+    let mimeTypes = {
+      json: 'application/json',
+      pdf: 'application/pdf',
+      zip: 'application/zip',
+      gzip: 'application/gzip',
+      rar: 'application/x-rar-compressed',
+      tar: 'application/x-tar',
+      torrent: 'application/x-bittorrent',
+      doc: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      docx: 'application/msword',
+      xls: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      xlsx: 'application/vnd.ms-excel',
+      xlsm: 'application/vnd.ms-excel.sheet.macroEnabled.12',
+      ppt: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      pptx: 'application/vnd.ms-powerpoint',
+      dvi: 'application/x-dvi',
+      ttf: 'application/x-font-ttf',
+      p12: 'application/x-pkcs12',
+      pfx: 'application/x-pkcs12',
+      p7b: 'application/x-pkcs7-certificates',
+      spc: 'application/x-pkcs7-certificates',
+      p7r: 'application/x-pkcs7-certreqresp',
+      p7c: 'application/x-pkcs7-mime',
+      p7m: 'application/x-pkcs7-mim',
+      p7s: 'application/x-pkcs7-signature',
+      mp3: 'audio/mpeg',
+      aac: 'audio/aac',
+      ogg: 'audio/ogg',
+      gif: 'image/gif',
+      jpeg: 'image/jpeg',
+      jpg: 'image/jpeg',
+      png: 'image/png',
+      svg: 'image/svg+xml',
+      tiff: 'image/tiff',
+      ico: 'image/vnd.microsoft.icon',
+      wbmp: 'image/vnd.wap.wbmp',
+      cmd: 'text/cmd',
+      css: 'text/css',
+      csv: 'text/csv',
+      html: 'text/html',
+      js: 'text/javascript',
+      txt: 'text/plain',
+      php: 'text/php',
+      xml: 'text/xml',
+      mpeg: 'video/mpeg',
+      mp4: 'video/mp4',
+      webm: 'video/webm',
+      flv: 'video/x-flv',
+      avi: 'video/x-msvideo',
+      '3gpp': 'video/3gpp',
+      '3gp': 'video/3gpp',
+      '3gpp2': 'video/3gpp2',
+      '3g2': 'video/3gpp2'
+    }
+    
     result.request.method = options.method
     result.request.protocol = options.protocol
     result.request.host = options.host
@@ -182,7 +236,7 @@ toolslight.request = function(customOptions = {}) {
     }
 
     options.boundary = ''
-    if (!this.isEmpty(options.formData)) {
+    if (Object.keys(options.formData).length > 0) {
       options.boundary = '--------------------------'
       for (let i = 0; i < 24; i++) {
         options.boundary += Math.floor(Math.random() * 10).toString(16);
@@ -284,81 +338,16 @@ toolslight.request = function(customOptions = {}) {
         }
         reject(options.errorPrefix + err)
       })
-      
-      if (!this.isEmpty(options.body) && !options.isBodyFile && this.isEmpty(options.formData)) {
+
+      if (options.body && !(options.body instanceof stream.Readable) && !Object.keys(options.formData).length) {
         req.write(options.body)
-      }
-
-      if (options.isBodyFile) {
-        fs.createReadStream(options.body).pipe(req)
-      } else if (!this.isEmpty(options.formData)) {
-
-        /*
-          IF FORM DATA:
-        */
-
-        const stream = require('stream')
+        req.end()
+      } else if (options.body instanceof stream.Readable) {
+        options.body.pipe(req)
+      } else if (Object.keys(options.formData).length > 0) {
 
         /*
-          MIME TYPES:
-        */
-        let mimeTypes = {
-          json: 'application/json',
-          pdf: 'application/pdf',
-          zip: 'application/zip',
-          gzip: 'application/gzip',
-          rar: 'application/x-rar-compressed',
-          tar: 'application/x-tar',
-          torrent: 'application/x-bittorrent',
-          doc: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          docx: 'application/msword',
-          xls: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          xlsx: 'application/vnd.ms-excel',
-          xlsm: 'application/vnd.ms-excel.sheet.macroEnabled.12',
-          ppt: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-          pptx: 'application/vnd.ms-powerpoint',
-          dvi: 'application/x-dvi',
-          ttf: 'application/x-font-ttf',
-          p12: 'application/x-pkcs12',
-          pfx: 'application/x-pkcs12',
-          p7b: 'application/x-pkcs7-certificates',
-          spc: 'application/x-pkcs7-certificates',
-          p7r: 'application/x-pkcs7-certreqresp',
-          p7c: 'application/x-pkcs7-mime',
-          p7m: 'application/x-pkcs7-mim',
-          p7s: 'application/x-pkcs7-signature',
-          mp3: 'audio/mpeg',
-          aac: 'audio/aac',
-          ogg: 'audio/ogg',
-          gif: 'image/gif',
-          jpeg: 'image/jpeg',
-          jpg: 'image/jpeg',
-          png: 'image/png',
-          svg: 'image/svg+xml',
-          tiff: 'image/tiff',
-          ico: 'image/vnd.microsoft.icon',
-          wbmp: 'image/vnd.wap.wbmp',
-          cmd: 'text/cmd',
-          css: 'text/css',
-          csv: 'text/csv',
-          html: 'text/html',
-          js: 'text/javascript',
-          txt: 'text/plain',
-          php: 'text/php',
-          xml: 'text/xml',
-          mpeg: 'video/mpeg',
-          mp4: 'video/mp4',
-          webm: 'video/webm',
-          flv: 'video/x-flv',
-          avi: 'video/x-msvideo',
-          '3gpp': 'video/3gpp',
-          '3gp': 'video/3gpp',
-          '3gpp2': 'video/3gpp2',
-          '3g2': 'video/3gpp2'
-        }
-
-        /*
-          FUNCTION FOR SYNC WRITE TO REQ.
+          FUNCTION FOR SYNC SEND DATA FROM READ-STREAM TO REQ:
         */
 
         let sendBodySync = (boundary, formDataName, formDataValue, isStart, isEnd, writeStream) => {
@@ -439,29 +428,18 @@ toolslight.request = function(customOptions = {}) {
           })
         }
 
-        let iMax = 0
-        for (const form in options.formData) {
-          iMax++
-        }
-
         let i = 0
         for (const formDataName in options.formData) {
             i++
-            let isEnd = false
-            let isStart = false
-            if (i === iMax) {
-                isEnd = true
-            } else if (i === 1) {
-                isStart = true
-            }
+            let isStart = i === 1 ? true : false
+            let isEnd = i === Object.keys(options.formData).length ? true : false
+
             let formDataValue = options.formData[formDataName]
             if (formDataValue === undefined) {
               formDataValue = ''
             }
             await sendBodySync(options.boundary, formDataName, formDataValue, isStart, isEnd, req)
         }
-      } else {
-        req.end()
       }
     }
 
@@ -480,7 +458,17 @@ toolslight.request = function(customOptions = {}) {
       requestOptions.localAddress = options.localAddress
     }
 
-    if (!this.isEmpty(options.formData)) {
+    if (options.body instanceof stream.Readable && !requestOptions.headers['Content-Type']) {
+      let fileName = options.body.path.split('/')[options.body.path.split('/').length - 1]
+      let fileExt = fileName.split('.')
+      let contentType = mimeTypes[fileExt]
+      if (!contentType) {
+        contentType = mimeTypes.txt
+      }
+      requestOptions.headers['Content-Type'] = contentType
+    }
+
+    if (Object.keys(options.formData).length > 0) {
       requestOptions.headers['Content-Type'] = 'multipart/form-data; boundary=' + options.boundary
     }
 
