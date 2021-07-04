@@ -292,48 +292,149 @@ toolslight.request = function(customOptions = {}) {
       if (options.isBodyFile) {
         fs.createReadStream(options.body).pipe(req)
       } else if (!this.isEmpty(options.formData)) {
+
+        /*
+          IF FORM DATA:
+        */
+
         const stream = require('stream')
-        let sendBodySync = (boundary, form, isStart, isEnd, writeStream) => {
+
+        /*
+          MIME TYPES:
+        */
+        let mimeTypes = {
+          json: 'application/json',
+          pdf: 'application/pdf',
+          zip: 'application/zip',
+          gzip: 'application/gzip',
+          rar: 'application/x-rar-compressed',
+          tar: 'application/x-tar',
+          torrent: 'application/x-bittorrent',
+          doc: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          docx: 'application/msword',
+          xls: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          xlsx: 'application/vnd.ms-excel',
+          xlsm: 'application/vnd.ms-excel.sheet.macroEnabled.12',
+          ppt: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+          pptx: 'application/vnd.ms-powerpoint',
+          dvi: 'application/x-dvi',
+          ttf: 'application/x-font-ttf',
+          p12: 'application/x-pkcs12',
+          pfx: 'application/x-pkcs12',
+          p7b: 'application/x-pkcs7-certificates',
+          spc: 'application/x-pkcs7-certificates',
+          p7r: 'application/x-pkcs7-certreqresp',
+          p7c: 'application/x-pkcs7-mime',
+          p7m: 'application/x-pkcs7-mim',
+          p7s: 'application/x-pkcs7-signature',
+          mp3: 'audio/mpeg',
+          aac: 'audio/aac',
+          ogg: 'audio/ogg',
+          gif: 'image/gif',
+          jpeg: 'image/jpeg',
+          jpg: 'image/jpeg',
+          png: 'image/png',
+          svg: 'image/svg+xml',
+          tiff: 'image/tiff',
+          ico: 'image/vnd.microsoft.icon',
+          wbmp: 'image/vnd.wap.wbmp',
+          cmd: 'text/cmd',
+          css: 'text/css',
+          csv: 'text/csv',
+          html: 'text/html',
+          js: 'text/javascript',
+          txt: 'text/plain',
+          php: 'text/php',
+          xml: 'text/xml',
+          mpeg: 'video/mpeg',
+          mp4: 'video/mp4',
+          webm: 'video/webm',
+          flv: 'video/x-flv',
+          avi: 'video/x-msvideo',
+          '3gpp': 'video/3gpp',
+          '3gp': 'video/3gpp',
+          '3gpp2': 'video/3gpp2',
+          '3g2': 'video/3gpp2'
+        }
+
+        /*
+          FUNCTION FOR SYNC WRITE TO REQ.
+        */
+
+        let sendBodySync = (boundary, formDataName, formDataValue, isStart, isEnd, writeStream) => {
           return new Promise((resolve) => {
+            
+              /*
+                BODY HEADER CREATE STREAM:
+              */
+
               let bodyHead = ''
               if (!isStart) {
                   bodyHead += '\r\n'
               }
               bodyHead += '--' + boundary + '\r\n'
   
-              if (typeof(form.value) !== 'object') {
-                  bodyHead += 'Content-Disposition: form-data; name="' + form.name + '"' + '\r\n\r\n'
+              if (typeof(formDataValue) !== 'object') {
+                  bodyHead += 'Content-Disposition: form-data; name="' + formDataName + '"' + '\r\n\r\n'
               } else {
-                  bodyHead += 'Content-Disposition: form-data; name="' + form.name + '"; filename="' + form.value.path.split('/')[form.value.path.split('/').length - 1] + '"' + '\r\n'
-                  bodyHead += 'Content-Type: text/plain' + '\r\n\r\n'
+                  let fileName = formDataValue.path.split('/')[formDataValue.path.split('/').length - 1]
+                  let fileExt = fileName.split('.')
+                  let bodyHeadContentType = mimeTypes[fileExt]
+                  if (!bodyHeadContentType) {
+                    bodyHeadContentType = mimeTypes.txt
+                  }
+                  bodyHead += 'Content-Disposition: form-data; name="' + formDataName + '"; filename="' + formDataValue.path.split('/')[formDataValue.path.split('/').length - 1] + '"' + '\r\n'
+                  bodyHead += 'Content-Type: ' + bodyHeadContentType + '\r\n\r\n'
               }
               let bodyHeadStream = stream.Readable.from(Buffer.from(bodyHead))
   
               bodyHeadStream.on('end', () => {
+
+                  /*
+                    BODY DATA CREATE STREAM:
+                  */
+
                   let bodyDataStream
-                  if (typeof(form.value) !== 'object') {
-                      bodyDataStream = stream.Readable.from(Buffer.from(form.value.toString()))
+                  if (typeof(formDataValue) !== 'object') {
+                      bodyDataStream = stream.Readable.from(Buffer.from(formDataValue.toString()))
                   } else {
-                      bodyDataStream = form.value
+                      bodyDataStream = formDataValue
                   }
       
                   bodyDataStream.on('end', () => {
                       if (isEnd) {
+
+                          /*
+                            BODY FOOTER CREATE STREAM:
+                          */
+
                           let bodyFooterStream = stream.Readable.from(Buffer.from('\r\n' + '--' + boundary + '--'))
   
                           bodyFooterStream.on('end', () => {
                               resolve(writeStream)
                           })
-                          
+
+                         /*
+                            BODY FOOTER SEND STREAM:
+                          */
+
                           bodyFooterStream.pipe(writeStream)
                       } else {
                           resolve(writeStream)
                       }
                   })
       
+                  /*
+                    BODY DATA SEND STREAM:
+                  */
+
                   bodyDataStream.pipe(writeStream, {end: false})
               })
   
+              /*
+                BODY HEADER SEND STREAM:
+              */
+
               bodyHeadStream.pipe(writeStream, {end: false})
           })
         }
@@ -344,8 +445,7 @@ toolslight.request = function(customOptions = {}) {
         }
 
         let i = 0
-        let good
-        for (let form of options.formData) {
+        for (let formDataName of options.formData) {
             i++
             let isEnd = false
             let isStart = false
@@ -354,12 +454,12 @@ toolslight.request = function(customOptions = {}) {
             } else if (i === 1) {
                 isStart = true
             }
-            good = await sendBodySync(options.boundary, form, isStart, isEnd, req)
+            let formDataValue = options.formData[formDataName]
+            await sendBodySync(options.boundary, formDataName, formDataValue, isStart, isEnd, req)
         }
       } else {
         req.end()
       }
-  
     }
 
     let requestOptions = {
