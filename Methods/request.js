@@ -440,12 +440,12 @@ toolslight.request = function(customOptions = {}) {
         }
 
         let iMax = 0
-        for (let form of options.formData) {
+        for (const form in options.formData) {
           iMax++
         }
 
         let i = 0
-        for (let formDataName of options.formData) {
+        for (const formDataName in options.formData) {
             i++
             let isEnd = false
             let isStart = false
@@ -455,6 +455,9 @@ toolslight.request = function(customOptions = {}) {
                 isStart = true
             }
             let formDataValue = options.formData[formDataName]
+            if (formDataValue === undefined) {
+              formDataValue = ''
+            }
             await sendBodySync(options.boundary, formDataName, formDataValue, isStart, isEnd, req)
         }
       } else {
