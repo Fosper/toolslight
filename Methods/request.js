@@ -37,6 +37,7 @@ toolslight.request = function(customOptions = {}) {
       headers: {'Content-Type': 'application/json'},
       isBodyFile: false,
       body: JSON.stringify({field: '123'}),
+      formData: {},
       timeout: 5000, // In milliseconds (1000 = 1 second).
       bodySizeLimit: 10240,
       bodyEncoding: 'utf8', // utf8 or binary
@@ -96,6 +97,7 @@ toolslight.request = function(customOptions = {}) {
       headers: {},
       isBodyFile: false,
       body: '',
+      formData: {},
       timeout: 5000,
       bodySizeLimit: 10240,
       bodyEncoding: 'utf8',
@@ -179,8 +181,16 @@ toolslight.request = function(customOptions = {}) {
       reject(options.errorPrefix + 'Toolslight (request): Incorrect protocol.')
     }
 
-    let start = (requestOptions, connect = {}) => {
-      var req = library.request(requestOptions, res => {
+    options.boundary = ''
+    if (!this.isEmpty(options.formData)) {
+      options.boundary = '--------------------------'
+      for (let i = 0; i < 24; i++) {
+        options.boundary += Math.floor(Math.random() * 10).toString(16);
+      }
+    }
+
+    let start = async (requestOptions, connect = {}) => {
+      var req = library.request(requestOptions, (res) => {
         let output
         switch (res.headers['content-encoding']) {
             case 'br':
@@ -202,12 +212,12 @@ toolslight.request = function(customOptions = {}) {
                 output = res
                 break
         }
-
+        
         if (!this.isEmpty(options.saveTo) || options.bodyEncoding === 'binary') {
-          output.setEncoding('binary')
+          res.setEncoding('binary')
           result.response.body = []
         } else {
-          output.setEncoding('utf8')
+          res.setEncoding('utf8')
         }
 
         output.on('data', (chunk) => {
@@ -275,12 +285,77 @@ toolslight.request = function(customOptions = {}) {
         reject(options.errorPrefix + err)
       })
       
-      if (!this.isEmpty(options.body) && !options.isBodyFile) {
+      if (!this.isEmpty(options.body) && !options.isBodyFile && this.isEmpty(options.formData)) {
         req.write(options.body)
       }
 
       if (options.isBodyFile) {
         fs.createReadStream(options.body).pipe(req)
+      } else if (!this.isEmpty(options.formData)) {
+        const stream = require('stream')
+        let sendBodySync = (boundary, form, isStart, isEnd, writeStream) => {
+          return new Promise((resolve) => {
+              let bodyHead = ''
+              if (!isStart) {
+                  bodyHead += '\r\n'
+              }
+              bodyHead += '--' + boundary + '\r\n'
+  
+              if (typeof(form.value) !== 'object') {
+                  bodyHead += 'Content-Disposition: form-data; name="' + form.name + '"' + '\r\n\r\n'
+              } else {
+                  bodyHead += 'Content-Disposition: form-data; name="' + form.name + '"; filename="' + form.value.path.split('/')[form.value.path.split('/').length - 1] + '"' + '\r\n'
+                  bodyHead += 'Content-Type: text/plain' + '\r\n\r\n'
+              }
+              let bodyHeadStream = stream.Readable.from(Buffer.from(bodyHead))
+  
+              bodyHeadStream.on('end', () => {
+                  let bodyDataStream
+                  if (typeof(form.value) !== 'object') {
+                      bodyDataStream = stream.Readable.from(Buffer.from(form.value.toString()))
+                  } else {
+                      bodyDataStream = form.value
+                  }
+      
+                  bodyDataStream.on('end', () => {
+                      if (isEnd) {
+                          let bodyFooterStream = stream.Readable.from(Buffer.from('\r\n' + '--' + boundary + '--'))
+  
+                          bodyFooterStream.on('end', () => {
+                              resolve(writeStream)
+                          })
+                          
+                          bodyFooterStream.pipe(writeStream)
+                      } else {
+                          resolve(writeStream)
+                      }
+                  })
+      
+                  bodyDataStream.pipe(writeStream, {end: false})
+              })
+  
+              bodyHeadStream.pipe(writeStream, {end: false})
+          })
+        }
+
+        let iMax = 0
+        for (let form of options.formData) {
+          iMax++
+        }
+
+        let i = 0
+        let good
+        for (let form of options.formData) {
+            i++
+            let isEnd = false
+            let isStart = false
+            if (i === iMax) {
+                isEnd = true
+            } else if (i === 1) {
+                isStart = true
+            }
+            good = await sendBodySync(options.boundary, form, isStart, isEnd, req)
+        }
       } else {
         req.end()
       }
@@ -300,6 +375,10 @@ toolslight.request = function(customOptions = {}) {
 
     if (!this.isEmpty(options.localAddress)) {
       requestOptions.localAddress = options.localAddress
+    }
+
+    if (!this.isEmpty(options.formData)) {
+      requestOptions.headers['Content-Type'] = 'multipart/form-data; boundary=' + options.boundary
     }
 
     if (!this.isEmpty(options.proxyHost)) {
