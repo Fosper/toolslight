@@ -55,7 +55,7 @@ const toolslight = require('toolslight')
 
 When you call any method - you can easy handle errors (if they was).
 
-## For example - call method without errors:
+### For example - call method without errors:
 
 ```js
 let myCorrectObject = toolslight.jsonToObject('{"name":"Jack"}')
@@ -73,7 +73,7 @@ Returns object:
 
 You can also make `console.log(myCorrectObject.stackTrace)` for show detailed log.
 
-## For example - call method and and we make a error on purpose:
+### For example - call method and and we make a error on purpose:
 
 ```js
 let myIncorrectObject = toolslight.jsonToObject('"name":"Jack"')
@@ -99,7 +99,7 @@ You can also make `console.log(myIncorrectObject.stackTrace)` for show detailed 
 When you call any method - you can select your initiator.
 It's convenient to use if you have many childs from `spawn` or `fork`, and you want to know who run some method.
 
-## For example - call method with initiator, and and we make a mistake on purpose:
+### For example - call method with initiator, and and we make a mistake on purpose:
 
 ```js
 let myIncorrectObject2 = toolslight.jsonToObject({initiator: 'My child 3', json: '"name":"Jack"'})
