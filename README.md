@@ -123,7 +123,7 @@ You can also make `console.log(myIncorrectObject2.stackTrace)` for show detailed
 # Methods
 
 If method return promise (you will see it in example) - you can use `await` or `then` to get result.
-Don't use `catch`, cause all promises uses only `resolve`
+Don't use `catch`, cause all promises uses only `resolve`.
 
 ## toolslight.arraysMerge
 Example:
@@ -253,6 +253,9 @@ console.log(toolslight.getMyEachIPv4('ens3').data) // Returns array: array of st
 console.log(toolslight.getMyEachIPv4(['ens3', 'lo']).data) // Returns array: array of strings IPv4 for network interface 'ens3' and 'lo'
 ```
 
+Description:
+Use `console.log(require('os').networkInterfaces())` if you want to show all your network interfaces.
+
 [back to top](#table-of-contents)
 
 ## toolslight.getMyEachIPv6
@@ -262,6 +265,9 @@ console.log(toolslight.getMyEachIPv6().data) // Returns array: array of strings 
 console.log(toolslight.getMyEachIPv6('ens3').data) // Returns array: array of strings IPv6 for network interface 'ens3'
 console.log(toolslight.getMyEachIPv6(['ens3', 'lo']).data) // Returns array: array of strings IPv6 for network interface 'ens3' and 'lo'
 ```
+
+Description:
+Use `console.log(require('os').networkInterfaces())` if you want to show all your network interfaces.
 
 [back to top](#table-of-contents)
 
@@ -273,6 +279,9 @@ console.log(toolslight.getMyIPv4('ens3').data) // Returns string: last finded IP
 console.log(toolslight.getMyIPv4(['ens3', 'lo']).data) // Returns string: last finded IPv4 for network interface 'ens3' and 'lo'
 ```
 
+Description:
+Use `console.log(require('os').networkInterfaces())` if you want to show all your network interfaces.
+
 [back to top](#table-of-contents)
 
 ## toolslight.getMyIPv6
@@ -282,6 +291,9 @@ console.log(toolslight.getMyIPv6().data) // Returns string: last finded IPv6 for
 console.log(toolslight.getMyIPv6('ens3').data) // Returns string: last finded IPv6 for network interface 'ens3'
 console.log(toolslight.getMyIPv6(['ens3', 'lo']).data) // Returns string: last finded IPv6 for network interface 'ens3' and 'lo'
 ```
+
+Description:
+Use `console.log(require('os').networkInterfaces())` if you want to show all your network interfaces.
 
 [back to top](#table-of-contents)
 
