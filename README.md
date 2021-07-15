@@ -10,28 +10,28 @@ Also, this package uses only native nodejs modules (except `socks-proxy-agent` a
 - [Before usage methods 2/2](#before-usage-methods-22)
 - [Methods](#methods)
 - [arraysMerge](#toolslightarraysMerge)
-- [getDate](#toolslight.getDate)
-- [getDayOfMonth](#toolslight.getDayOfMonth)
-- [getDayOfWeek](#toolslight.getDayOfWeek)
-- [getHash](#toolslight.getHash)
-- [getHour](#toolslight.getHour)
-- [getMinute](#toolslight.getMinute)
-- [getMonth](#toolslight.getMonth)
-- [getMyEachIPv4](#toolslight.getMyEachIPv4)
-- [getMyEachIPv6](#toolslight.getMyEachIPv6)
-- [getMyIPv4](#toolslight.getMyIPv4)
-- [getMyIPv6](#toolslight.getMyIPv6)
-- [getSecond](#toolslight.getSecond)
-- [getTs](#toolslight.getTs)
-- [getYear](#toolslight.getYear)
-- [httpRequest](#toolslight.httpRequest)
-- [isInternetAvailable](#toolslight.isInternetAvailable)
-- [isPathExists](#toolslight.isPathExists)
-- [isProxyAvailable](#toolslight.isProxyAvailable)
-- [jsonToObject](#toolslight.jsonToObject)
-- [randInt](#toolslight.randInt)
-- [sleep](#toolslight.sleep)
-- [uniqid](#toolslight.uniqid)
+- [getDate](#toolslightgetDate)
+- [getDayOfMonth](#toolslightgetDayOfMonth)
+- [getDayOfWeek](#toolslightgetDayOfWeek)
+- [getHash](#toolslightgetHash)
+- [getHour](#toolslightgetHour)
+- [getMinute](#toolslightgetMinute)
+- [getMonth](#toolslightgetMonth)
+- [getMyEachIPv4](#toolslightgetMyEachIPv4)
+- [getMyEachIPv6](#toolslightgetMyEachIPv6)
+- [getMyIPv4](#toolslightgetMyIPv4)
+- [getMyIPv6](#toolslightgetMyIPv6)
+- [getSecond](#toolslightgetSecond)
+- [getTs](#toolslightgetTs)
+- [getYear](#toolslightgetYear)
+- [httpRequest](#toolslighthttpRequest)
+- [isInternetAvailable](#toolslightisInternetAvailable)
+- [isPathExists](#toolslightisPathExists)
+- [isProxyAvailable](#toolslightisProxyAvailable)
+- [jsonToObject](#toolslightjsonToObject)
+- [randInt](#toolslightrandInt)
+- [sleep](#toolslightsleep)
+- [uniqid](#toolslightuniqid)
 
 # Install
 
@@ -138,6 +138,7 @@ console.log(toolslight.arraysMerge({arrays: [[123, 456], [456, 789]], unique: fa
 
 Returns array: `[123, 456, 456, 789]`
 
+[back to top](#table-of-contents)
 
 ## toolslight.getDate
 
@@ -189,7 +190,7 @@ console.log(toolslight.getDate({date: '2020-11-15', utc: -1}).data)
 
 Returns string: `2020-11-14 23:00:00`
 
-
+[back to top](#table-of-contents)
 
 ## toolslight.getDayOfMonth
 
