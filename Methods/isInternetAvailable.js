@@ -2,11 +2,11 @@ const toolslight = require('../index.js')
 const { createConnection } = require('net')
 
 /*
-    Example-1:
+    Example (through await):
     let isInternetAvailable = await toolslight.isInternetAvailable()
     console.log(isInternetAvailable.data) // Returns boolean: is have internet connection
 
-    Example-2:
+    Example (through then):
     toolslight.isInternetAvailable().then((result) => {console.log(result.data)}) // Returns boolean: is have internet connection
 */
 

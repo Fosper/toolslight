@@ -3,7 +3,7 @@ const { createHash } = require('crypto')
 const { Readable } = require('stream')
 
 /*
-    Example-1:
+    Example (through await):
     let hash
     hash = await toolslight.getHash('Hi')
     console.log(hash.data) // Returns string: 3639efcd08abb273b1619e82e78c29a7df02c1051b1820e99fc395dcaa3326b8
@@ -12,7 +12,7 @@ const { Readable } = require('stream')
     hash = await toolslight.getHash({data: fs.createReadStream('/srv/project/file.txt'), type: 'sha256', format: 'base64'})
     console.log(hash.data) // Returns string: base64 encoded file hash
 
-    Example-2:
+    Example (through then):
     toolslight.getHash('Hi').then((data) => {console.log(data.data)}) // Returns string: 3639efcd08abb273b1619e82e78c29a7df02c1051b1820e99fc395dcaa3326b8
     toolslight.getHash({data: 'Hi', type: 'sha256', format: 'hex'}).then((data) => {console.log(data.data)}) // Returns string: 3639efcd08abb273b1619e82e78c29a7df02c1051b1820e99fc395dcaa3326b8
     toolslight.getHash({data: fs.createReadStream('/srv/project/file.txt'), type: 'sha256', format: 'base64'}).then((data) => {console.log(data.data)}) // Returns string: base64 encoded file hash

@@ -1,11 +1,11 @@
 const toolslight = require('../index.js')
 
 /*
-    Example-1:
+    Example (through await):
     await toolslight.sleep(2000)
     console.log('Message after 2 second.')
 
-    Example-2:
+    Example (through then):
     toolslight.sleep(2000).then(() => {console.log('Message after 2 second.')})
 */
 

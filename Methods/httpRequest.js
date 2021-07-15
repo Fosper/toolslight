@@ -4,11 +4,11 @@ const { createBrotliDecompress, createGunzip, createInflate } = require('zlib')
 const { existsSync, appendFileSync, unlinkSync } = require('fs')
 
 /*
-    Example-1:
+    Example (through await):
     let httpRequest = await toolslight.httpRequest({
         initiator: '',
         method: 'GET',
-        protocol: 'https',
+        protocol: 'https', // Only 'http' or 'https'.
         host: 'google.com',
         port: 443,
         path: '/',
@@ -16,10 +16,10 @@ const { existsSync, appendFileSync, unlinkSync } = require('fs')
         body: '',
         bodyFormData: {},
         connectionTimeout: 5000,
-        responseBodySizeLimit: 1024 * 1024 * 1024, // 1Gb
+        responseBodySizeLimit: 1024 * 1024 * 1024, // 1Gb.
         responseBodySaveTo: '',
         proxy: {
-            protocol: 'socks', // Only socks supported.
+            protocol: 'socks', // Only 'socks' supported.
             host: '',
             port: 8080,
             username: '',
@@ -32,11 +32,11 @@ const { existsSync, appendFileSync, unlinkSync } = require('fs')
     console.log(httpRequest.data) // Returns object: request and response data.
     if (httpRequest.data.response?.body) console.log(Buffer.from(httpRequest.data.response.body, 'binary').toString()) // Returns string: response body.
 
-    Example-2:
+    Example (through then):
     toolslight.httpRequest({
         initiator: '',
         method: 'GET',
-        protocol: 'https',
+        protocol: 'https', // Only 'http' or 'https'.
         host: 'google.com',
         port: 443,
         path: '/',
@@ -44,7 +44,7 @@ const { existsSync, appendFileSync, unlinkSync } = require('fs')
         body: '',
         bodyFormData: {},
         connectionTimeout: 5000,
-        responseBodySizeLimit: 1024 * 1024 * 1024, // 1Gb
+        responseBodySizeLimit: 1024 * 1024 * 1024, // 1Gb.
         responseBodySaveTo: '',
         proxy: {
             protocol: 'socks',
