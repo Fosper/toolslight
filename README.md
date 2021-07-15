@@ -9,7 +9,7 @@ Also, this package uses only native nodejs modules (except `socks-proxy-agent` a
 - [Before usage methods 1/2](#before-usage-methods-12)
 - [Before usage methods 2/2](#before-usage-methods-22)
 - [Methods](#methods)
-- [arraysMerge](#toolslight.arraysMerge)
+- [arraysMerge](#toolslightarraysMerge)
 - [getDate](#toolslight.getDate)
 - [getDayOfMonth](#toolslight.getDayOfMonth)
 - [getDayOfWeek](#toolslight.getDayOfWeek)
@@ -118,7 +118,7 @@ Returns object:
 }
 ```
 
-You can also get key `myIncorrectObject2.stackTrace` for show detailed log.
+You can also make `console.log(myIncorrectObject2.stackTrace)` for show detailed log.
 
 # Methods
 
@@ -137,6 +137,7 @@ console.log(toolslight.arraysMerge({arrays: [[123, 456], [456, 789]], unique: fa
 ```
 
 Returns array: `[123, 456, 456, 789]`
+
 
 ## toolslight.getDate
 
@@ -187,6 +188,8 @@ console.log(toolslight.getDate({date: '2020-11-15', utc: -1}).data)
 ```
 
 Returns string: `2020-11-14 23:00:00`
+
+
 
 ## toolslight.getDayOfMonth
 
