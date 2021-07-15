@@ -48,11 +48,10 @@ const toolslight = require('toolslight')
 # Before usage methods 1/2
 
 ## All methods return object with three keys:
-{
+
 * data `default: null`
 * error `default: null`
 * stackTrace `default: []`
-}
 
 When you call any method - you can easy handle errors (if they was).
 
@@ -67,12 +66,9 @@ if (myCorrectObject.error) {
 }
 ```
 
-Returns data key:
-`{
-    name: 'Jack'
-}`
+Returns object: ```js{name: 'Jack'}```
 
-You can also get key `myCorrectObject.stackTrace` for show detailed log.
+You can also make `console.log(myCorrectObject.stackTrace)` for show detailed log.
 
 ## For example - call method and and we make a error on purpose:
 
@@ -85,13 +81,10 @@ if (myIncorrectObject.error) {
 }
 ```
 
-Returns error key:
-`{
-  code: 'INCORRECT_OPTION_VALUE',
-  message: 'toolslight.isProxyAvailable: Error: Incorrect option 'json', value: '"name":"Jack"'. This is not JSONable string.'
-}`
+Returns object: `{code: 'INCORRECT_OPTION_VALUE',
+  message: 'toolslight.isProxyAvailable: Error: Incorrect option 'json', value: '"name":"Jack"'. This is not JSONable string.'}`
 
-You can also get key `myIncorrectObject.stackTrace` for show detailed log.
+You can also make `console.log(myIncorrectObject.stackTrace)` for show detailed log.
 
 # Before usage methods 2/2
 
