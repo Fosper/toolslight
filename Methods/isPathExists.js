@@ -1,39 +1,41 @@
 
 const toolslight = require('../index.js')
+const { existsSync } = require('fs')
 
 /*
     Example:
     const toolslight = require('toolslight')
-    console.log(toolslight.jsonToObject('{"name":"Jack"}').data) // Returns object: { name: 'Jack' }
+    console.log(toolslight.isPathExists('/srv/project/file.txt').data) // Returns boolean: is path (directory or file) exists
+    console.log(toolslight.isPathExists({initiator: 'Parent', file: '/srv/project/file.txt'}).data) // Returns boolean: is path (directory or file) exists
 */
 
-toolslight.jsonToObject = function(customOptions = {}) {
-    let me = 'toolslight.isProxyAvailable'
+toolslight.isPathExists = function(customOptions = {}) {
+    let me = 'toolslight.isPathExists'
 
     /*
         PREPARE:
     */
-    
+
     let result = {
         data: null,
-        error: null, // Codes: INCORRECT_OPTIONS, INCORRECT_OPTION_VALUE
+        error: null, // Codes: INCORRECT_OPTIONS
         stackTrace: []
     }
 
     let defaultOptions = {
         initiator: '',
-        json: ''
+        file: ''
     }
 
     let defaultOptionsAvailableTypes = {
         initiator: ['[object String]'],
-        json: ['[object String]']
+        file: ['[object String]']
     }
 
     let defaultOptionsAvailableValues = {}
 
     let defaultValue = {
-        name: 'json',
+        name: 'file',
         position: 1
     }
 
@@ -51,17 +53,7 @@ toolslight.jsonToObject = function(customOptions = {}) {
         LOGIC:
     */
 
-    try {
-        result.data = JSON.parse(options.json)
-        return result
-    } catch (e) {
-        result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'json\', value: ' + options.json + '. This is not JSONable string.')
-        result.error = {
-            code: 'INCORRECT_OPTION_VALUE',
-            message: result.stackTrace[result.stackTrace.length - 1]
-        }
-        return result
-    }
+    result.data = existsSync(options.file)
+
+    return result
 }
-
-

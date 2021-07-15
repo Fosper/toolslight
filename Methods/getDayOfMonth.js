@@ -1,20 +1,20 @@
 const toolslight = require('../index.js')
-    
+
 /*
     Example:
     const toolslight = require('toolslight')
-    console.log(toolslight.getDate().data) // Returns string: current date in format YYYY-MM-DD HH:MM:SS
-    console.log(toolslight.getDate(1605468733).data) // Returns string: 2020-11-15 19:32:13
-    console.log(toolslight.getDate(1605468733050).data) // Returns string: 2020-11-15 19:32:13
-    console.log(toolslight.getDate('2020-11-15').data) // Returns string: 2020-11-15 00:00:00
-    console.log(toolslight.getDate({utc: -1}).data) // Returns string: current date in format YYYY-MM-DD HH:MM:SS
-    console.log(toolslight.getDate({date: 1605468733, utc: -1}).data) // Returns string: 2020-11-15 18:32:13
-    console.log(toolslight.getDate({date: 1605468733050, utc: -1}).data) // Returns string: 2020-11-15 18:32:13
-    console.log(toolslight.getDate({date: '2020-11-15', utc: -1}).data) // Returns string: 2020-11-14 23:00:00
+    console.log(toolslight.getDayOfMonth().data) // Returns number: current day of month
+    console.log(toolslight.getDayOfMonth(1605468733).data) // Returns number: 15
+    console.log(toolslight.getDayOfMonth(1605468733050).data) // Returns number: 15
+    console.log(toolslight.getDayOfMonth('2020-11-15').data) // Returns number: 15
+    console.log(toolslight.getDayOfMonth({utc: -1}).data) // Returns number: current day of month
+    console.log(toolslight.getDayOfMonth({date: 1605468733, utc: -1}).data) // Returns number: 15
+    console.log(toolslight.getDayOfMonth({date: 1605468733050, utc: -1}).data) // Returns number: 15
+    console.log(toolslight.getDayOfMonth({date: '2020-11-15', utc: -1}).data) // Returns number: 14
 */
 
-toolslight.getDate = function(customOptions = {}) {
-    let me = 'toolslight.getDate'
+toolslight.getDayOfMonth = function(customOptions = {}) {
+    let me = 'toolslight.getDayOfMonth'
 
     /*
         PREPARE:
@@ -82,30 +82,7 @@ toolslight.getDate = function(customOptions = {}) {
     }
     timestamp += options.utc * 3600000
 
-    let dt = new Date(timestamp)
-    let year = dt.getUTCFullYear()
-    let month = parseInt(dt.getUTCMonth() + 1)
-    if (month < 10) {
-        month = '0' + month
-    }
-    let day = dt.getUTCDate()
-    if (day < 10) {
-        day = '0' + day
-    }
-    let hour = dt.getUTCHours()
-    if (hour < 10) {
-        hour = '0' + hour
-    }
-    let minute = dt.getUTCMinutes()
-    if (minute < 10) {
-        minute = '0' + minute
-    }
-    let second = dt.getUTCSeconds()
-    if (second < 10) {
-        second = '0' + second
-    }
-
-    result.data = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
+    result.data = parseInt(new Date(timestamp).getUTCDate())
 
     return result
 }

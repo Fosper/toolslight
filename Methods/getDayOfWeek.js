@@ -1,43 +1,91 @@
 const toolslight = require('../index.js')
 
-toolslight.getDayOfWeek = function(date = Date.now()) {
-    
-    /*
-        Returns number.
+/*
+    Example:
+    const toolslight = require('toolslight')
+    console.log(toolslight.getDayOfWeek().data) // Returns number: current day of week
+    console.log(toolslight.getDayOfWeek(1605468733).data) // Returns number: 7
+    console.log(toolslight.getDayOfWeek(1605468733050).data) // Returns number: 7
+    console.log(toolslight.getDayOfWeek('2020-11-15').data) // Returns number: 7
+    console.log(toolslight.getDayOfWeek({utc: -1}).data) // Returns number: current day of week
+    console.log(toolslight.getDayOfWeek({date: 1605468733, utc: -1}).data) // Returns number: 7
+    console.log(toolslight.getDayOfWeek({date: 1605468733050, utc: -1}).data) // Returns number: 7
+    console.log(toolslight.getDayOfWeek({date: '2020-11-15', utc: -1}).data) // Returns number: 6
+*/
 
-        Example:
-        .getDayOfWeek() - Returns current day of week. 1 for Monday, 2 for Tuesday ... 7 for Sunday.
-        .getDayOfWeek(1604863933) - Returns specified day of week. 1 for Monday, 2 for Tuesday ... 7 for Sunday.
-        .getDayOfWeek(1604863933000) - Returns specified day of week. 1 for Monday, 2 for Tuesday ... 7 for Sunday.
-        .getDayOfWeek('2020-09-02 01:09:05') - Returns specified day of week. 1 for Monday, 2 for Tuesday ... 7 for Sunday.
+toolslight.getDayOfWeek = function(customOptions = {}) {
+    let me = 'toolslight.getDayOfWeek'
+
+    /*
+        PREPARE:
+    */
+
+    let result = {
+        data: null,
+        error: null, // Codes: INCORRECT_OPTIONS, INCORRECT_OPTION_VALUE
+        stackTrace: []
+    }
+
+    let defaultOptions = {
+        initiator: '',
+        date: Date.now(),
+        utc: this.utc
+    }
+
+    let defaultOptionsAvailableTypes = {
+        initiator: ['[object String]'],
+        date: ['[object Number]', '[object String]'],
+        utc: ['[object Number]']
+    }
+
+    let defaultOptionsAvailableValues = {}
+
+    let defaultValue = {
+        name: 'date',
+        position: 1
+    }
+
+    let options = this.getOptions(me, customOptions, defaultOptions, defaultOptionsAvailableTypes, defaultOptionsAvailableValues, defaultValue, result.stackTrace)
+
+    if (!options) {
+        result.error = {
+            code: 'INCORRECT_OPTIONS',
+            message: result.stackTrace[result.stackTrace.length - 1]
+        }
+        return result
+    }
+
+    /*
+        LOGIC:
     */
 
     let timestamp
-
-    if (typeof date === 'number') {
-        timestamp = date
+    if (typeof options.date === 'number') {
+        timestamp = options.date
     } else {
-        timestamp = Date.parse(date)
+        timestamp = Date.parse(options.date)
     }
 
-    let timestampLength = timestamp.toString().length
-
-    if (timestampLength < 13) {
-        let needAdd = 13 - timestampLength
-        for (let i = 0; i < needAdd; i++) {
-            timestamp = timestamp * 10
+    if (timestamp < 0 || isNaN(timestamp)) {
+        result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'date\' value: \'' + options.date + '\'.')
+        result.error = {
+            code: 'INCORRECT_OPTION_VALUE',
+            message: result.stackTrace[result.stackTrace.length - 1]
         }
+        return result
     }
 
-    timestamp = (Math.floor(timestamp / 1000))
-    timestamp = timestamp + (this.UTC * 60 * 60)
-    timestamp = timestamp * 1000
-    
-    let dt = new Date(timestamp)
-    let dayOfWeek = dt.getDay()
-    if (dayOfWeek === 0) {
-        dayOfWeek = 7
+    let timestampLengthDifference = 13 - timestamp.toString().length
+
+    if (timestampLengthDifference) {
+        timestamp = timestamp * (timestampLengthDifference === 1 ? 10 : timestampLengthDifference === 2 ? 100 : 1000)
+    }
+    timestamp += options.utc * 3600000
+
+    result.data = parseInt(new Date(timestamp).getUTCDay())
+    if (result.data === 0) {
+        result.data = 7
     }
 
-    return dayOfWeek
+    return result
 }
