@@ -242,6 +242,8 @@ console.log(toolslight.getDayOfMonth({date: '2020-11-15', utc: -1}).data)
 
 Returns number: `14`
 
+[back to top](#table-of-contents)
+
 ## toolslight.getDayOfWeek
 
 ```js
@@ -292,6 +294,8 @@ console.log(toolslight.getDayOfWeek({date: '2020-11-15', utc: -1}).data)
 
 Returns number: `6`
 
+[back to top](#table-of-contents)
+
 ## toolslight.getHash
 ```js
 let hash = await toolslight.getHash('Hi')
@@ -331,6 +335,8 @@ toolslight.getHash({data: fs.createReadStream('/srv/project/file.txt'), type: 's
 ```
 
 Returns string: base64 encoded file hash
+
+[back to top](#table-of-contents)
 
 ## toolslight.getHour
 
@@ -382,6 +388,8 @@ console.log(toolslight.getHour({date: '2020-11-15', utc: -1}).data)
 
 Returns number: `23`
 
+[back to top](#table-of-contents)
+
 ## toolslight.getMinute
 
 ```js
@@ -432,6 +440,8 @@ console.log(toolslight.getMinute({date: '2020-11-15', utc: -1}).data)
 
 Returns number: `0`
 
+[back to top](#table-of-contents)
+
 ## toolslight.getMonth
 ```js
 console.log(toolslight.getMonth().data)
@@ -481,6 +491,7 @@ console.log(toolslight.getMonth({date: '2020-11-15', utc: -1}).data)
 
 Returns number: `11`
 
+[back to top](#table-of-contents)
 
 ## toolslight.getMyEachIPv4
 ```js
@@ -501,6 +512,8 @@ console.log(toolslight.getMyEachIPv4(['ens3', 'lo']).data)
 
 Returns array: array of strings IPv4 for network interface 'ens3' and 'lo'
 
+[back to top](#table-of-contents)
+
 ## toolslight.getMyEachIPv6
 ```js
 console.log(toolslight.getMyEachIPv6().data)
@@ -519,6 +532,8 @@ console.log(toolslight.getMyEachIPv6(['ens3', 'lo']).data)
 ```
 
 Returns array: array of strings IPv6 for network interface 'ens3' and 'lo'
+
+[back to top](#table-of-contents)
 
 ## toolslight.getMyIPv4
 ```js
@@ -539,6 +554,8 @@ console.log(toolslight.getMyIPv4(['ens3', 'lo']).data)
 
 Returns string: last finded IPv4 for network interface 'ens3' and 'lo'
 
+[back to top](#table-of-contents)
+
 ## toolslight.getMyIPv6
 ```js
 console.log(toolslight.getMyIPv6().data)
@@ -557,6 +574,8 @@ console.log(toolslight.getMyIPv6(['ens3', 'lo']).data)
 ```
 
 Returns string: last finded IPv6 for network interface 'ens3' and 'lo'
+
+[back to top](#table-of-contents)
 
 ## toolslight.getSecond
 ```js
@@ -607,104 +626,57 @@ console.log(toolslight.getSecond({date: '2020-11-15', utc: -1}).data)
 
 Returns number: `0`
 
+[back to top](#table-of-contents)
+
 ## toolslight.getTs
 ```js
-console.log(toolslight.getTs().data)
+console.log(toolslight.getTs().data) // Returns number: current timestamp (13 digits)
+console.log(toolslight.getTs(1605468733).data) // Returns number: 1605468733000
+console.log(toolslight.getTs(1605468733050).data) // Returns number: 1605468733050
+console.log(toolslight.getTs('2020-11-15').data) // Returns number: 1605398400000
+console.log(toolslight.getTs({utc: -1}).data) // Returns number: current timestamp (13 digits)
+console.log(toolslight.getTs({date: 1605468733, utc: -1}).data) // Returns number: 1605468733000
+console.log(toolslight.getTs({date: 1605468733050, utc: -1}).data) // Returns number: 1605468733050
+console.log(toolslight.getTs({date: '2020-11-15', utc: -1}).data) // Returns number: 1605398400000
 ```
 
-Returns number: current timestamp (13 digits)
-
-```js
-console.log(toolslight.getTs(1605468733).data)
-```
-
-Returns number: `1605468733000`
-
-```js
-console.log(toolslight.getTs(1605468733050).data)
-```
-
-Returns number: `1605468733050`
-
-```js
-console.log(toolslight.getTs('2020-11-15').data)
-```
-
-Returns number: `1605398400000`
-
-```js
-console.log(toolslight.getTs({utc: -1}).data)
-```
-
-Returns number: current timestamp (13 digits)
-
-```js
-console.log(toolslight.getTs({date: 1605468733, utc: -1}).data)
-```
-
-Returns number: `1605468733000`
-
-```js
-console.log(toolslight.getTs({date: 1605468733050, utc: -1}).data)
-```
-
-Returns number: `1605468733050`
-
-```js
-console.log(toolslight.getTs({date: '2020-11-15', utc: -1}).data)
-```
-
-Returns number: `1605398400000`
+[back to top](#table-of-contents)
 
 ## toolslight.getYear
 
 ```js
-console.log(toolslight.getYear().data)
+console.log(toolslight.getYear().data) // Returns number: current year
 ```
-
-Returns number: current year
 
 ```js
-console.log(toolslight.getYear(1605468733).data)
+console.log(toolslight.getYear(1605468733).data) // Returns number: 2020
 ```
-
-Returns number: `2020`
 
 ```js
-console.log(toolslight.getYear(1605468733050).data)
+console.log(toolslight.getYear(1605468733050).data) // Returns number: 2020
 ```
-
-Returns number: `2020`
 
 ```js
-console.log(toolslight.getYear('2020-11-15').data)
+console.log(toolslight.getYear('2020-11-15').data) // Returns number: 2020
 ```
-
-Returns number: `2020`
 
 ```js
-console.log(toolslight.getYear({utc: -1}).data)
+console.log(toolslight.getYear({utc: -1}).data) // Returns number: current year
 ```
-
-Returns number: current year
 
 ```js
-console.log(toolslight.getYear({date: 1605468733, utc: -1}).data)
+console.log(toolslight.getYear({date: 1605468733, utc: -1}).data) // Returns number: 2020
 ```
-
-Returns number: `2020`
 
 ```js
-console.log(toolslight.getYear({date: 1605468733050, utc: -1}).data)
+console.log(toolslight.getYear({date: 1605468733050, utc: -1}).data) // Returns number: 2020
 ```
-
-Returns number: `2020`
 
 ```js
-console.log(toolslight.getYear({date: '2020-11-15', utc: -1}).data)
+console.log(toolslight.getYear({date: '2020-11-15', utc: -1}).data) // Returns number: 2020
 ```
 
-Returns number: `2020`
+[back to top](#table-of-contents)
 
 ## toolslight.httpRequest
 
@@ -733,11 +705,11 @@ let httpRequest = await toolslight.httpRequest({
     localAddress: '',
     globalTimeout: 30000
 })
-console.log(httpRequest.data) Returns object: request and response data.
-if (httpRequest.data.response?.body) console.log(Buffer.from(httpRequest.data.response.body, 'binary').toString())
+console.log(httpRequest.data) // Returns object: request and response data.
+if (httpRequest.data.response?.body) console.log(Buffer.from(httpRequest.data.response.body, 'binary').toString()) // Returns string: response body.
 ```
 
-Returns string: response body.
+[back to top](#table-of-contents)
 
 ## toolslight.isInternetAvailable
 ```js
@@ -753,6 +725,8 @@ toolslight.isInternetAvailable().then((result) => {console.log(result.data)})
 
 Returns boolean: is have internet connection
 
+[back to top](#table-of-contents)
+
 ## toolslight.isPathExists
 ```js
 console.log(toolslight.isPathExists('/srv/project/file.txt').data)
@@ -765,6 +739,8 @@ console.log(toolslight.isPathExists({initiator: 'Parent', file: '/srv/project/fi
 ```
 
 Returns boolean: is path (directory or file) exists
+
+[back to top](#table-of-contents)
 
 ## toolslight.isProxyAvailable
 ```js
@@ -796,12 +772,16 @@ toolslight.isProxyAvailable({
 
 Returns boolean: is proxy available
 
+[back to top](#table-of-contents)
+
 ## toolslight.jsonToObject
 ```js
 console.log(toolslight.jsonToObject('{"name":"Jack"}').data)
 ```
 
 Returns object: `{ name: 'Jack' }`
+
+[back to top](#table-of-contents)
 
 ## toolslight.randInt
 ```js
@@ -816,6 +796,8 @@ console.log(toolslight.randInt({from: 1, to: 10}).data)
 
 Returns number: from 1 to 10 (includes 1 and 10)
 
+[back to top](#table-of-contents)
+
 ## toolslight.sleep
 ```js
 await toolslight.sleep(2000)
@@ -825,6 +807,8 @@ console.log('Message after 2 second.')
 ```js
 toolslight.sleep(2000).then(() => {console.log('Message after 2 second.')})
 ```
+
+[back to top](#table-of-contents)
 
 ## toolslight.uniqid
 ```js
