@@ -66,7 +66,10 @@ if (myCorrectObject.error) {
 }
 ```
 
-Returns object: ```js{name: 'Jack'}```
+Returns object:
+```js
+{name: 'Jack'}
+```
 
 You can also make `console.log(myCorrectObject.stackTrace)` for show detailed log.
 
@@ -81,8 +84,13 @@ if (myIncorrectObject.error) {
 }
 ```
 
-Returns object: `{code: 'INCORRECT_OPTION_VALUE',
-  message: 'toolslight.isProxyAvailable: Error: Incorrect option 'json', value: '"name":"Jack"'. This is not JSONable string.'}`
+Returns object:
+```js
+{
+    code: 'INCORRECT_OPTION_VALUE',
+    message: 'toolslight.isProxyAvailable: Error: Incorrect option 'json', value: '"name":"Jack"'. This is not JSONable string.'
+}
+```
 
 You can also make `console.log(myIncorrectObject.stackTrace)` for show detailed log.
 
@@ -102,14 +110,15 @@ if (myIncorrectObject2.error) {
 }
 ```
 
-Returns error key:
-`{
+Returns object:
+```js
+{
   code: 'INCORRECT_OPTION_VALUE',
   message: 'My child 3: toolslight.isProxyAvailable: Error: Incorrect option 'json', value: '"name":"Jack"'. This is not JSONable string.'
-}`
+}
+```
 
 You can also get key `myIncorrectObject2.stackTrace` for show detailed log.
-
 
 # Methods
 
