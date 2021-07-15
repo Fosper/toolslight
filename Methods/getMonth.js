@@ -2,7 +2,6 @@ const toolslight = require('../index.js')
 
 /*
     Example:
-    const toolslight = require('toolslight')
     console.log(toolslight.getMonth().data) // Returns number: current month (from 1 to 12)
     console.log(toolslight.getMonth(1605468733).data) // Returns number: 11
     console.log(toolslight.getMonth(1605468733050).data) // Returns number: 11

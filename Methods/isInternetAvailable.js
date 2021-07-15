@@ -3,7 +3,6 @@ const { createConnection } = require('net')
 
 /*
     Example-1:
-    const toolslight = require('toolslight')
     let isInternetAvailable = await toolslight.isInternetAvailable()
     console.log(isInternetAvailable.data) // Returns boolean: is have internet connection
 

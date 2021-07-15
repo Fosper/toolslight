@@ -5,7 +5,6 @@ const { existsSync, appendFileSync, unlinkSync } = require('fs')
 
 /*
     Example-1:
-    const toolslight = require('toolslight')
     let httpRequest = await toolslight.httpRequest({
         initiator: '',
         method: 'GET',
@@ -13,14 +12,14 @@ const { existsSync, appendFileSync, unlinkSync } = require('fs')
         host: 'google.com',
         port: 443,
         path: '/',
-        headers: {'Auth': 'try', 'content': 'txt'},
+        headers: {'Content-Type': 'text/plain', 'User-Agent': 'Mozilla/5.0'},
         body: '',
         bodyFormData: {},
         connectionTimeout: 5000,
         responseBodySizeLimit: 1024 * 1024 * 1024, // 1Gb
         responseBodySaveTo: '',
         proxy: {
-            protocol: 'socks',
+            protocol: 'socks', // Only socks supported.
             host: '',
             port: 8080,
             username: '',
@@ -30,11 +29,10 @@ const { existsSync, appendFileSync, unlinkSync } = require('fs')
         localAddress: '',
         globalTimeout: 30000
     })
-    console.log(httpRequest) // Returns object: request and response data.
+    console.log(httpRequest.data) // Returns object: request and response data.
     if (httpRequest.data.response?.body) console.log(Buffer.from(httpRequest.data.response.body, 'binary').toString()) // Returns string: response body.
 
     Example-2:
-    const toolslight = require('toolslight')
     toolslight.httpRequest({
         initiator: '',
         method: 'GET',

@@ -2,7 +2,6 @@ const toolslight = require('../index.js')
     
 /*
     Example:
-    const toolslight = require('toolslight')
     console.log(toolslight.arraysMerge([[123, 456], [456, 789]]).data) // Returns array: [123, 456, 789]
     console.log(toolslight.arraysMerge({arrays: [[123, 456], [456, 789]], unique: false}).data) // Returns array: [123, 456, 456, 789]
 */

@@ -4,7 +4,6 @@ const { existsSync } = require('fs')
 
 /*
     Example:
-    const toolslight = require('toolslight')
     console.log(toolslight.isPathExists('/srv/project/file.txt').data) // Returns boolean: is path (directory or file) exists
     console.log(toolslight.isPathExists({initiator: 'Parent', file: '/srv/project/file.txt'}).data) // Returns boolean: is path (directory or file) exists
 */

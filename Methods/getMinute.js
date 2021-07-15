@@ -2,7 +2,6 @@ const toolslight = require('../index.js')
 
 /*
     Example:
-    const toolslight = require('toolslight')
     console.log(toolslight.getMinute().data) // Returns number: current minute of hour (from 0 to 59)
     console.log(toolslight.getMinute(1605468733).data) // Returns number: 32
     console.log(toolslight.getMinute(1605468733050).data) // Returns number: 32

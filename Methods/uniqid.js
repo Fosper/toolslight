@@ -4,7 +4,6 @@ const toolslight = require('../index.js')
     Returns string.
 
     Example:
-    const toolslight = require('toolslight')
     console.log(toolslight.uniqid().data) // Returns string: random 13 characters with 'a-z' and '0-9'
     console.log(toolslight.uniqid(20).data) // Returns string: random 20 characters with 'a-z' and '0-9'
     console.log(toolslight.uniqid({

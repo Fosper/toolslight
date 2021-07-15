@@ -2,7 +2,7 @@ const toolslight = require('../index.js')
 
 /*
     Example:
-    const toolslight = require('toolslight')
+    console.log(toolslight.getTs().data) // Returns number: current timestamp (13 digits)
     console.log(toolslight.getTs(1605468733).data) // Returns number: 1605468733000
     console.log(toolslight.getTs(1605468733050).data) // Returns number: 1605468733050
     console.log(toolslight.getTs('2020-11-15').data) // Returns number: 1605398400000

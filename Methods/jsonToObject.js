@@ -3,7 +3,6 @@ const toolslight = require('../index.js')
 
 /*
     Example:
-    const toolslight = require('toolslight')
     console.log(toolslight.jsonToObject('{"name":"Jack"}').data) // Returns object: { name: 'Jack' }
 */
 
@@ -55,7 +54,7 @@ toolslight.jsonToObject = function(customOptions = {}) {
         result.data = JSON.parse(options.json)
         return result
     } catch (e) {
-        result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'json\', value: ' + options.json + '. This is not JSONable string.')
+        result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'json\', value: \'' + options.json + '\'. This is not JSONable string.')
         result.error = {
             code: 'INCORRECT_OPTION_VALUE',
             message: result.stackTrace[result.stackTrace.length - 1]

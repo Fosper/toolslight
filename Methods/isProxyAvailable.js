@@ -3,7 +3,6 @@ const toolslight = require('../index.js')
 
 /*
     Example-1:
-    const toolslight = require('toolslight')
     let isProxyAvailable = await toolslight.isProxyAvailable({
         protocol: 'https', // Default: 'https'. Can be 'http' or 'https' or 'socks'.
         host: '127.0.0.1', // Default '127.0.0.1'. Proxy host.
@@ -16,7 +15,6 @@ const toolslight = require('../index.js')
     console.log(isProxyAvailable.data) // Returns boolean: is proxy available
 
     Example-2:
-    const toolslight = require('toolslight')
     toolslight.isProxyAvailable({
         protocol: 'https', // Default: 'https'. Can be 'http' or 'https' or 'socks'.
         host: '127.0.0.1', // Default '127.0.0.1'. Proxy host.

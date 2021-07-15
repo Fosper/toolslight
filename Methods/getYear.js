@@ -2,7 +2,6 @@ const toolslight = require('../index.js')
 
 /*
     Example:
-    const toolslight = require('toolslight')
     console.log(toolslight.getYear().data) // Returns number: current year
     console.log(toolslight.getYear(1605468733).data) // Returns number: 2020
     console.log(toolslight.getYear(1605468733050).data) // Returns number: 2020

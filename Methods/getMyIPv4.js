@@ -3,7 +3,6 @@ const os = require('os')
 
 /*
     Example:
-    const toolslight = require('toolslight')
     console.log(toolslight.getMyIPv4().data) // Returns string: last finded IPv4 for all network interfaces
     console.log(toolslight.getMyIPv4('ens3').data) // Returns string: last finded IPv4 for network interface 'ens3'
     console.log(toolslight.getMyIPv4(['ens3', 'lo']).data) // Returns string: last finded IPv4 for network interface 'ens3' and 'lo'

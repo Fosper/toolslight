@@ -2,7 +2,6 @@ const toolslight = require('../index.js')
     
 /*
     Example:
-    const toolslight = require('toolslight')
     console.log(toolslight.getDate().data) // Returns string: current date in format YYYY-MM-DD HH:MM:SS
     console.log(toolslight.getDate(1605468733).data) // Returns string: 2020-11-15 19:32:13
     console.log(toolslight.getDate(1605468733050).data) // Returns string: 2020-11-15 19:32:13

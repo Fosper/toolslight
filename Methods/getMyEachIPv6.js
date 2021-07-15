@@ -3,7 +3,6 @@ const os = require('os')
 
 /*
     Example:
-    const toolslight = require('toolslight')
     console.log(toolslight.getMyEachIPv6().data) // Returns array: array of strings IPv6 for all network interfaces
     console.log(toolslight.getMyEachIPv6('ens3').data) // Returns array: array of strings IPv6 for network interface 'ens3'
     console.log(toolslight.getMyEachIPv6(['ens3', 'lo']).data) // Returns array: array of strings IPv6 for network interface 'ens3' and 'lo'

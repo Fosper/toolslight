@@ -2,7 +2,6 @@ const toolslight = require('../index.js')
 
 /*
     Example:
-    const toolslight = require('toolslight')
     console.log(toolslight.getDayOfWeek().data) // Returns number: current day of week
     console.log(toolslight.getDayOfWeek(1605468733).data) // Returns number: 7
     console.log(toolslight.getDayOfWeek(1605468733050).data) // Returns number: 7

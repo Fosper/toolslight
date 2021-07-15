@@ -2,7 +2,6 @@ const toolslight = require('../index.js')
 
 /*
     Example:
-    const toolslight = require('toolslight')
     console.log(toolslight.randInt().data) // Returns number: from 0 to 1
     console.log(toolslight.randInt({from: 1, to: 10}).data) // Returns number: from 1 to 10 (includes 1 and 10)
 */
