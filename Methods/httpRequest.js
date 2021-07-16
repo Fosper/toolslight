@@ -68,7 +68,7 @@ toolslight.httpRequest = function(customOptions = {}) {
 
     let result = {
         data: null,
-        error: null, // Codes: INCORRECT_OPTIONS, INCORRECT_OPTION_VALUE, RESPONSE_BODY_SIZE_LIMIT, HOST_CONNECTION_TIMEOUT, HOST_ABORTED_CONNECTION, HOST_UNSUPPORTED_TLS, HOST_UNREACHABLE, HOST_UNHANDLED_ERROR, PROXY_ABORTED_CONNECTION, GLOBAL_TIMEOUT
+        error: null, // Codes: INCORRECT_OPTIONS, INCORRECT_OPTION_VALUE, RESPONSE_BODY_SIZE_LIMIT, HOST_CONNECTION_TIMEOUT, HOST_ABORTED_CONNECTION, HOST_UNSUPPORTED_TLS, HOST_UNREACHABLE, HOST_UNHANDLED_ERROR, PROXY_CONNECTION_TIMEOUT, PROXY_ABORTED_CONNECTION, GLOBAL_TIMEOUT
         stackTrace: []
     }
 
@@ -500,6 +500,8 @@ toolslight.httpRequest = function(customOptions = {}) {
                 }
             }
 
+            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Request error event with error: ' + error.message)
+
             if (error.message.includes('routines:ssl3_get_record:wrong version number')) {
                 error.message = 'routines:ssl3_get_record:wrong version number'
             } else if (error.message.includes('A "socket" was not created for HTTP request before')) {
@@ -526,7 +528,7 @@ toolslight.httpRequest = function(customOptions = {}) {
                 case 'A "socket" was not created for HTTP request before':
                     result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Request aborted cause trying to connection with proxy take more than \'' + options.proxy.connectionTimeout + '\' ms, request didn\'t send. You can increase timeout in option \'proxy.connectionTimeout\'.')
                     result.error = {
-                        code: 'HOST_CONNECTION_TIMEOUT',
+                        code: 'PROXY_CONNECTION_TIMEOUT',
                         message: result.stackTrace[result.stackTrace.length - 1]
                     }
                     break
