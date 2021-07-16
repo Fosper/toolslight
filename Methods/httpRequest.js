@@ -106,7 +106,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         path: ['[object String]'],
 
         headers: ['[object Object]'],
-        body: ['[object String]', 'instanceof Readable'],
+        body: ['[object String]', '[object Uint8Array]', 'instanceof Readable'],
         bodyFormData: ['[object Object]'],
         connectionTimeout: ['[object Number]'],
 
