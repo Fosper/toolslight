@@ -113,9 +113,7 @@ class Toolslight {
                     } else {
                         isAvailableType = true
                     }
-                    if (defaultOption === 'port' && !isFirstRun) {
-                        console.log(isAvailableType)
-                    }
+                    
                     if (!isAvailableType) {
                         stackTrace.push((initiator ? initiator + ': ' : '') + functionName + ': ' + 'Error: custom option \'' + defaultOption + '\' can\'t be type of \'' + Object.prototype.toString.call(customOptions[defaultOption]) + '\'. Available types for this variable: \'' + defaultOptionsAvailableTypes[defaultOption].join('\', \'') + '\'.')
                         return false
