@@ -70,7 +70,12 @@ class Toolslight {
             if (customOptions[defaultOption] !== undefined) {
                 if (Object.prototype.toString.call(defaultOptions[defaultOption]) === '[object Object]') {
                     if (Object.keys(defaultOptions[defaultOption]).length) {
-                        options[defaultOption] = this.getOptions(functionName, customOptions[defaultOption], defaultOptions[defaultOption], defaultOptionsAvailableTypes[defaultOption], defaultOptionsAvailableValues[defaultOption], defaultValue, stackTrace, false, initiator)
+                        let getOptionsResult = this.getOptions(functionName, customOptions[defaultOption], defaultOptions[defaultOption], defaultOptionsAvailableTypes[defaultOption], defaultOptionsAvailableValues[defaultOption], defaultValue, stackTrace, false, initiator)
+                        if (!getOptionsResult) {
+                            return false
+                        } else {
+                            options[defaultOption] = getOptionsResult
+                        }
                     } else {
                         if (Object.prototype.toString.call(customOptions[defaultOption]) === '[object Object]' && Object.keys(customOptions[defaultOption]).length) {
                             options[defaultOption] = customOptions[defaultOption]
@@ -80,7 +85,9 @@ class Toolslight {
                     }
                 } else {
                     let isAvailableType = false
+
                     if (defaultOptionsAvailableTypes[defaultOption] && defaultOptionsAvailableTypes[defaultOption].length) {
+
                         for (let availableType of defaultOptionsAvailableTypes[defaultOption]) {
                             if (isAvailableType) {
                                 break
@@ -105,6 +112,9 @@ class Toolslight {
                         }
                     } else {
                         isAvailableType = true
+                    }
+                    if (defaultOption === 'port' && !isFirstRun) {
+                        console.log(isAvailableType)
                     }
                     if (!isAvailableType) {
                         stackTrace.push((initiator ? initiator + ': ' : '') + functionName + ': ' + 'Error: custom option \'' + defaultOption + '\' can\'t be type of \'' + Object.prototype.toString.call(customOptions[defaultOption]) + '\'. Available types for this variable: \'' + defaultOptionsAvailableTypes[defaultOption].join('\', \'') + '\'.')
@@ -131,7 +141,12 @@ class Toolslight {
                 }
             } else {
                 if (Object.prototype.toString.call(defaultOptions[defaultOption]) === '[object Object]') {
-                    options[defaultOption] = this.getOptions(functionName, {}, defaultOptions[defaultOption], defaultOptionsAvailableTypes[defaultOption], defaultOptionsAvailableValues[defaultOption], defaultValue, stackTrace, false, initiator)
+                    let getOptionsResult = this.getOptions(functionName, {}, defaultOptions[defaultOption], defaultOptionsAvailableTypes[defaultOption], defaultOptionsAvailableValues[defaultOption], defaultValue, stackTrace, false, initiator)
+                    if (!getOptionsResult) {
+                        return false
+                    } else {
+                        options[defaultOption] = getOptionsResult
+                    }
                 } else {
                     options[defaultOption] = defaultOptions[defaultOption]
                 }

@@ -86,7 +86,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         responseBodySizeLimit: 1024 * 1024 * 1024, // 1Gb
         responseBodySaveTo: '',
         proxy: {
-            protocol: 'http',
+            protocol: 'socks',
             host: '',
             port: 8080,
             username: '',
