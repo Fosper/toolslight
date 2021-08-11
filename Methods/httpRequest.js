@@ -165,7 +165,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         }
 
         if (options.port < 0 || options.port > 65536) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'port\' value: \'' + options.port + '\'. Port can\'t be less than 0 and more than 65536.')
+            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'port\' value: \'' + options.port + '\'. This option can\'t be less than 0 and more than 65536.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -211,7 +211,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         }
 
         if (options.proxy.host && (options.proxy.port < 0 || options.proxy.port > 65536)) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'proxy.port\' value: \'' + options.proxy.port + '\'. Proxy port can\'t be less than 0 and more than 65536.')
+            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'proxy.port\' value: \'' + options.proxy.port + '\'. This option can\'t be less than 0 and more than 65536.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
