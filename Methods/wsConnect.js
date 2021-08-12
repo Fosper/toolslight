@@ -70,7 +70,7 @@ toolslight.wsConnect = function(customOptions = {}) {
         initiator: '',
         protocol: 'wss',
         host: 'google.com',
-        port: 8443,
+        port: 443,
         path: '/',
         url: '',
         headers: {},
