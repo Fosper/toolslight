@@ -79,10 +79,11 @@ toolslight.httpRequest = function(customOptions = {}) {
         host: 'google.com',
         port: 443,
         path: '/',
+        url: '',
         headers: {},
         body: '',
         bodyFormData: {},
-        connectionTimeout: 5000,
+        connectionTimeout: 10000,
         responseBodySizeLimit: 1024 * 1024 * 1024, // 1Gb
         responseBodySaveTo: '',
         proxy: {
@@ -104,6 +105,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         host: ['[object String]'],
         port: ['[object Number]'],
         path: ['[object String]'],
+        url: ['[object String]'],
 
         headers: ['[object Object]'],
         body: ['[object String]', '[object Uint8Array]', 'instanceof Readable'],
@@ -136,6 +138,14 @@ toolslight.httpRequest = function(customOptions = {}) {
     let defaultValue = {
         name: '',
         position: 1
+    }
+
+    if (customOptions.url) {
+        let parsedUrl = require('url').parse(customOptions.url)
+        customOptions.protocol = parsedUrl.protocol.substr(0, parsedUrl.protocol.length - 1)
+        customOptions.host = parsedUrl.hostname
+        customOptions.port = parsedUrl.port ? parseInt(parsedUrl.port) : customOptions.protocol === 'https' ? 443 : 80
+        customOptions.path = parsedUrl.hash ? parsedUrl.path + parsedUrl.hash : parsedUrl.path
     }
 
     let options = this.getOptions(me, customOptions, defaultOptions, defaultOptionsAvailableTypes, defaultOptionsAvailableValues, defaultValue, result.stackTrace)

@@ -72,8 +72,9 @@ toolslight.wsConnect = function(customOptions = {}) {
         host: 'google.com',
         port: 8443,
         path: '/',
+        url: '',
         headers: {},
-        connectionTimeout: 5000,
+        connectionTimeout: 10000,
         responseBodySizeLimit: 1024 * 1024 * 1024, // 1Gb
         proxy: {
             protocol: 'socks',
@@ -93,6 +94,7 @@ toolslight.wsConnect = function(customOptions = {}) {
         host: ['[object String]'],
         port: ['[object Number]'],
         path: ['[object String]'],
+        url: ['[object String]'],
 
         headers: ['[object Object]'],
         connectionTimeout: ['[object Number]'],
@@ -121,6 +123,14 @@ toolslight.wsConnect = function(customOptions = {}) {
     let defaultValue = {
         name: '',
         position: 1
+    }
+
+    if (customOptions.url) {
+        let parsedUrl = require('url').parse(customOptions.url)
+        customOptions.protocol = parsedUrl.protocol.substr(0, parsedUrl.protocol.length - 1)
+        customOptions.host = parsedUrl.hostname
+        customOptions.port = parsedUrl.port ? parseInt(parsedUrl.port) : customOptions.protocol === 'wss' ? 443 : 80
+        customOptions.path = parsedUrl.hash ? parsedUrl.path + parsedUrl.hash : parsedUrl.path
     }
 
     let options = this.getOptions(me, customOptions, defaultOptions, defaultOptionsAvailableTypes, defaultOptionsAvailableValues, defaultValue, result.stackTrace)
