@@ -15,19 +15,15 @@ class Toolslight {
         return this
     }
 
-    static getOptions(functionName, customOptions, defaultOptions, defaultOptionsAvailableTypes, defaultOptionsAvailableValues, defaultValue, stackTrace, isFirstRun = true, fromInitiator = '') {
-        let initiator = fromInitiator
+    static getOptions(functionName, customOptions, defaultOptions, defaultOptionsAvailableTypes, defaultOptionsAvailableValues, defaultValue, stackTrace, isFirstRun = true) {
 
         if (isFirstRun) {
-            if (Object.prototype.toString.call(customOptions.initiator) === '[object String]' && customOptions.initiator.length) {
-                initiator = customOptions.initiator
-            }
-            stackTrace.push((initiator ? initiator + ': ' : '') + functionName + ': ' + 'Function started.')
-            stackTrace.push((initiator ? initiator + ': ' : '') + functionName + ': ' + 'Income custom options: ' + JSON.stringify(customOptions))
+            stackTrace.push(functionName + ': ' + 'Function started.')
+            stackTrace.push(functionName + ': ' + 'Income custom options: ' + JSON.stringify(customOptions))
         }
         
         if (customOptions === undefined || customOptions === null) {
-            stackTrace.push((initiator ? initiator + ': ' : '') + functionName + ': ' + 'Error: custom options can\'t be \'undefined\' or \'null\'.')
+            stackTrace.push(functionName + ': ' + 'Error: custom options can\'t be \'undefined\' or \'null\'.')
             return false
         }
 
@@ -61,7 +57,7 @@ class Toolslight {
     
                 customOptions = replace(defaultOptions)
             } else {
-                stackTrace.push((initiator ? initiator + ': ' : '') + functionName + ': ' + 'Error: invalid function argument \'' + customOptions + '\'. See examples in node_modules->toolslight->Methods->functionName.js')
+                stackTrace.push(functionName + ': ' + 'Error: invalid function argument \'' + customOptions + '\'. See examples in node_modules->toolslight->Methods->functionName.js')
                 return false
             }
         }
@@ -70,7 +66,7 @@ class Toolslight {
             if (customOptions[defaultOption] !== undefined) {
                 if (Object.prototype.toString.call(defaultOptions[defaultOption]) === '[object Object]') {
                     if (Object.keys(defaultOptions[defaultOption]).length) {
-                        let getOptionsResult = this.getOptions(functionName, customOptions[defaultOption], defaultOptions[defaultOption], defaultOptionsAvailableTypes[defaultOption], defaultOptionsAvailableValues[defaultOption], defaultValue, stackTrace, false, initiator)
+                        let getOptionsResult = this.getOptions(functionName, customOptions[defaultOption], defaultOptions[defaultOption], defaultOptionsAvailableTypes[defaultOption], defaultOptionsAvailableValues[defaultOption], defaultValue, stackTrace, false)
                         if (!getOptionsResult) {
                             return false
                         } else {
@@ -115,7 +111,7 @@ class Toolslight {
                     }
                     
                     if (!isAvailableType) {
-                        stackTrace.push((initiator ? initiator + ': ' : '') + functionName + ': ' + 'Error: custom option \'' + defaultOption + '\' can\'t be type of \'' + Object.prototype.toString.call(customOptions[defaultOption]) + '\'. Available types for this variable: \'' + defaultOptionsAvailableTypes[defaultOption].join('\', \'') + '\'.')
+                        stackTrace.push(functionName + ': ' + 'Error: custom option \'' + defaultOption + '\' can\'t be type of \'' + Object.prototype.toString.call(customOptions[defaultOption]) + '\'. Available types for this variable: \'' + defaultOptionsAvailableTypes[defaultOption].join('\', \'') + '\'.')
                         return false
                     }
 
@@ -131,7 +127,7 @@ class Toolslight {
                         isAvailableValue = true
                     }
                     if (!isAvailableValue) {
-                        stackTrace.push((initiator ? initiator + ': ' : '') + functionName + ': ' + 'Error: custom option \'' + defaultOption + '\' can\'t contain value \'' + customOptions[defaultOption] + '\'. Available values: \'' + defaultOptionsAvailableValues[defaultOption].join('\', \'') + '\'.')
+                        stackTrace.push(functionName + ': ' + 'Error: custom option \'' + defaultOption + '\' can\'t contain value \'' + customOptions[defaultOption] + '\'. Available values: \'' + defaultOptionsAvailableValues[defaultOption].join('\', \'') + '\'.')
                         return false
                     }
 
@@ -139,7 +135,7 @@ class Toolslight {
                 }
             } else {
                 if (Object.prototype.toString.call(defaultOptions[defaultOption]) === '[object Object]') {
-                    let getOptionsResult = this.getOptions(functionName, {}, defaultOptions[defaultOption], defaultOptionsAvailableTypes[defaultOption], defaultOptionsAvailableValues[defaultOption], defaultValue, stackTrace, false, initiator)
+                    let getOptionsResult = this.getOptions(functionName, {}, defaultOptions[defaultOption], defaultOptionsAvailableTypes[defaultOption], defaultOptionsAvailableValues[defaultOption], defaultValue, stackTrace, false)
                     if (!getOptionsResult) {
                         return false
                     } else {
@@ -152,7 +148,7 @@ class Toolslight {
         }
 
         if (isFirstRun) {
-            stackTrace.push((initiator ? initiator + ': ' : '') + functionName + ': ' + 'Use options: ' + JSON.stringify(options))
+            stackTrace.push(functionName + ': ' + 'Use options: ' + JSON.stringify(options))
         }
 
         return options

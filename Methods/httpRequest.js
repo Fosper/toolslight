@@ -140,6 +140,8 @@ toolslight.httpRequest = function(customOptions = {}) {
         position: 1
     }
 
+    me = (customOptions.initiator && Object.prototype.toString.call(customOptions.initiator) === '[object String]') ? customOptions.initiator + '->' + me : me
+
     if (customOptions.url) {
         let parsedUrl = require('url').parse(customOptions.url)
         customOptions.protocol = parsedUrl.protocol.substr(0, parsedUrl.protocol.length - 1)
@@ -151,6 +153,14 @@ toolslight.httpRequest = function(customOptions = {}) {
     let options = this.getOptions(me, customOptions, defaultOptions, defaultOptionsAvailableTypes, defaultOptionsAvailableValues, defaultValue, result.stackTrace)
 
     return new Promise(async (resolve) => {
+        if (customOptions.initiator && Object.prototype.toString.call(customOptions.initiator) !== '[object String]') {
+            result.error = {
+                code: 'INCORRECT_OPTIONS',
+                message: me + 'Error: custom option \'initiator\' can\'t be type of ' + Object.prototype.toString.call(customOptions.initiator) + '\'. Available types for this variable: \'[object String]\'.'
+            }
+            resolve(result)
+            return
+        }
         if (!options) {
             result.error = {
                 code: 'INCORRECT_OPTIONS',
@@ -165,7 +175,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         */
 
         if (!options.host) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'host\' value: \'' + options.host + '\'. Host can\'t be empty.')
+            result.stackTrace.push(me + ': ' + 'Error: Incorrect option \'host\' value: \'' + options.host + '\'. Host can\'t be empty.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -175,7 +185,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         }
 
         if (options.port < 0 || options.port > 65536) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'port\' value: \'' + options.port + '\'. This option can\'t be less than 0 and more than 65536.')
+            result.stackTrace.push(me + ': ' + 'Error: Incorrect option \'port\' value: \'' + options.port + '\'. This option can\'t be less than 0 and more than 65536.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -185,7 +195,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         }
 
         if (options.body && Object.keys(options.bodyFormData).length) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'body\' value: \'' + options.body + '\' and option \'bodyFormData\' value: \'' + JSON.stringify(options.bodyFormData) + '\'. Use \'body\' or \'bodyFormData\', not both.')
+            result.stackTrace.push(me + ': ' + 'Error: Incorrect option \'body\' value: \'' + options.body + '\' and option \'bodyFormData\' value: \'' + JSON.stringify(options.bodyFormData) + '\'. Use \'body\' or \'bodyFormData\', not both.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -210,7 +220,7 @@ toolslight.httpRequest = function(customOptions = {}) {
                 path = path.join('/')
             }
             if (!existsSync(path)) {
-                result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'responseBodySaveTo\' value: \'' + options.responseBodySaveTo + '\'. Selected directory didn\'t exists. Change path or create this directory.')
+                result.stackTrace.push(me + ': ' + 'Error: Incorrect option \'responseBodySaveTo\' value: \'' + options.responseBodySaveTo + '\'. Selected directory didn\'t exists. Change path or create this directory.')
                 result.error = {
                     code: 'INCORRECT_OPTION_VALUE',
                     message: result.stackTrace[result.stackTrace.length - 1]
@@ -221,7 +231,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         }
 
         if (options.proxy.host && (options.proxy.port < 0 || options.proxy.port > 65536)) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'proxy.port\' value: \'' + options.proxy.port + '\'. This option can\'t be less than 0 and more than 65536.')
+            result.stackTrace.push(me + ': ' + 'Error: Incorrect option \'proxy.port\' value: \'' + options.proxy.port + '\'. This option can\'t be less than 0 and more than 65536.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -231,7 +241,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         }
 
         if (options.proxy.host && !options.proxy.username && options.proxy.password) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'proxy.username\' value: \'' + options.proxy.username + '\'. Proxy username must set, if you set proxy password.')
+            result.stackTrace.push(me + ': ' + 'Error: Incorrect option \'proxy.username\' value: \'' + options.proxy.username + '\'. Proxy username must set, if you set proxy password.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -241,7 +251,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         }
 
         if (options.proxy.host && !options.proxy.password && options.proxy.username) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'proxy.password\' value: \'' + options.proxy.password + '\'. Proxy password must set, if you set proxy username.')
+            result.stackTrace.push(me + ': ' + 'Error: Incorrect option \'proxy.password\' value: \'' + options.proxy.password + '\'. Proxy password must set, if you set proxy username.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -430,7 +440,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         
                 if (data.response.bodySize > options.responseBodySizeLimit) {
                     res.destroy()
-                    result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Response body size more than \'' + options.responseBodySizeLimit + '\' bytes. You can increase this value in option \'responseBodySizeLimit\'.')
+                    result.stackTrace.push(me + ': ' + 'Error: Response body size more than \'' + options.responseBodySizeLimit + '\' bytes. You can increase this value in option \'responseBodySizeLimit\'.')
                     result.error = {
                         code: 'RESPONSE_BODY_SIZE_LIMIT',
                         message: result.stackTrace[result.stackTrace.length - 1]
@@ -444,7 +454,7 @@ toolslight.httpRequest = function(customOptions = {}) {
                         } catch (error) {
                             res.destroy()
                             request.destroy()
-                            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Can\'t save response body to file: \'' + data.response.bodySavedTo + '\'. Somebody remove this file while saving in progress, or rename/remove file directory.')
+                            result.stackTrace.push(me + ': ' + 'Error: Can\'t save response body to file: \'' + data.response.bodySavedTo + '\'. Somebody remove this file while saving in progress, or rename/remove file directory.')
                             result.error = {
                                 code: 'INCORRECT_OPTION_VALUE',
                                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -474,7 +484,7 @@ toolslight.httpRequest = function(customOptions = {}) {
 
         let globalTimeout = setTimeout(() => {
             request.destroy()
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Request aborted cause request lasted more than \'' + options.globalTimeout + '\' ms. You can increase timeout in option \'globalTimeout\'.')
+            result.stackTrace.push(me + ': ' + 'Error: Request aborted cause request lasted more than \'' + options.globalTimeout + '\' ms. You can increase timeout in option \'globalTimeout\'.')
             result.error = {
                 code: 'GLOBAL_TIMEOUT',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -491,7 +501,7 @@ toolslight.httpRequest = function(customOptions = {}) {
 
         request.on('timeout', () => {
             request.destroy()
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Request aborted cause trying to connection with host take more than \'' + options.connectionTimeout + '\' ms, request didn\'t send. You can increase timeout in option \'timeout\'.')
+            result.stackTrace.push(me + ': ' + 'Error: Request aborted cause trying to connection with host take more than \'' + options.connectionTimeout + '\' ms, request didn\'t send. You can increase timeout in option \'timeout\'.')
             result.error = {
                 code: 'HOST_CONNECTION_TIMEOUT',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -510,7 +520,7 @@ toolslight.httpRequest = function(customOptions = {}) {
                 }
             }
 
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Request error event with error: ' + error.message)
+            result.stackTrace.push(me + ': ' + 'Request error event with error: ' + error.message)
 
             if (error.message.includes('routines:ssl3_get_record:wrong version number')) {
                 error.message = 'routines:ssl3_get_record:wrong version number'
@@ -522,42 +532,42 @@ toolslight.httpRequest = function(customOptions = {}) {
 
             switch (error.message) {
                 case 'socket hang up':
-                    result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Host \'' + options.host + '\' aborted connection, request didn\'t send.')
+                    result.stackTrace.push(me + ': ' + 'Error: Host \'' + options.host + '\' aborted connection, request didn\'t send.')
                     result.error = {
                         code: 'HOST_ABORTED_CONNECTION',
                         message: result.stackTrace[result.stackTrace.length - 1]
                     }
                     break
                 case 'routines:ssl3_get_record:wrong version number':
-                    result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Host \'' + options.host + '\' unsupported TSL, request didn\'t send. Maby you trying send request to https through 80 port.')
+                    result.stackTrace.push(me + ': ' + 'Error: Host \'' + options.host + '\' unsupported TSL, request didn\'t send. Maby you trying send request to https through 80 port.')
                     result.error = {
                         code: 'HOST_UNSUPPORTED_TLS',
                         message: result.stackTrace[result.stackTrace.length - 1]
                     }
                     break
                 case 'A "socket" was not created for HTTP request before':
-                    result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Request aborted cause trying to connection with proxy take more than \'' + options.proxy.connectionTimeout + '\' ms, request didn\'t send. You can increase timeout in option \'proxy.connectionTimeout\'.')
+                    result.stackTrace.push(me + ': ' + 'Error: Request aborted cause trying to connection with proxy take more than \'' + options.proxy.connectionTimeout + '\' ms, request didn\'t send. You can increase timeout in option \'proxy.connectionTimeout\'.')
                     result.error = {
                         code: 'PROXY_CONNECTION_TIMEOUT',
                         message: result.stackTrace[result.stackTrace.length - 1]
                     }
                     break
                 case 'connect ECONNREFUSED':
-                    result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Host \'' + options.host + '\' unreachable, request didn\'t send.')
+                    result.stackTrace.push(me + ': ' + 'Error: Host \'' + options.host + '\' unreachable, request didn\'t send.')
                     result.error = {
                         code: 'HOST_UNREACHABLE',
                         message: result.stackTrace[result.stackTrace.length - 1]
                     }
                     break
                 case 'Client network socket disconnected before secure TLS connection was established':
-                    result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Request aborted cause trying to connection with proxy take more than \'' + options.proxy.connectionTimeout + '\' ms, request didn\'t send. You can increase timeout in option \'proxy.connectionTimeout\'.')
+                    result.stackTrace.push(me + ': ' + 'Error: Request aborted cause trying to connection with proxy take more than \'' + options.proxy.connectionTimeout + '\' ms, request didn\'t send. You can increase timeout in option \'proxy.connectionTimeout\'.')
                     result.error = {
                         code: 'PROXY_ABORTED_CONNECTION',
                         message: result.stackTrace[result.stackTrace.length - 1]
                     }
                     break
                 default:
-                    result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: ' + error.message)
+                    result.stackTrace.push(me + ': ' + 'Error: ' + error.message)
                     result.error = {
                         code: 'HOST_UNHANDLED_ERROR',
                         message: result.stackTrace[result.stackTrace.length - 1]
@@ -672,7 +682,7 @@ toolslight.httpRequest = function(customOptions = {}) {
                 await sendBodySync(boundary, formDataName, formDataValue, isStart, isEnd, request)
             }
         } else {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Unknow request type.')
+            result.stackTrace.push(me + ': ' + 'Error: Unknow request type.')
             result.error = {
                 code: 'HOST_UNHANDLED_ERROR',
                 message: result.stackTrace[result.stackTrace.length - 1]

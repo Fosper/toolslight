@@ -85,7 +85,7 @@ toolslight.wsConnect = function(customOptions = {}) {
             connectionTimeout: 5000
         },
         localAddress: '',
-        globalTimeout: 86400000 // 1 Day
+        globalTimeout: 0
     }
 
     let defaultOptionsAvailableTypes = {
@@ -125,6 +125,8 @@ toolslight.wsConnect = function(customOptions = {}) {
         position: 1
     }
 
+    me = (customOptions.initiator && Object.prototype.toString.call(customOptions.initiator) === '[object String]') ? customOptions.initiator + '->' + me : me
+
     if (customOptions.url) {
         let parsedUrl = require('url').parse(customOptions.url)
         customOptions.protocol = parsedUrl.protocol.substr(0, parsedUrl.protocol.length - 1)
@@ -136,6 +138,14 @@ toolslight.wsConnect = function(customOptions = {}) {
     let options = this.getOptions(me, customOptions, defaultOptions, defaultOptionsAvailableTypes, defaultOptionsAvailableValues, defaultValue, result.stackTrace)
 
     return new Promise(async (resolve) => {
+        if (customOptions.initiator && Object.prototype.toString.call(customOptions.initiator) !== '[object String]') {
+            result.error = {
+                code: 'INCORRECT_OPTIONS',
+                message: me + 'Error: custom option \'initiator\' can\'t be type of ' + Object.prototype.toString.call(customOptions.initiator) + '\'. Available types for this variable: \'[object String]\'.'
+            }
+            resolve(result)
+            return
+        }
         if (!options) {
             result.error = {
                 code: 'INCORRECT_OPTIONS',
@@ -150,7 +160,7 @@ toolslight.wsConnect = function(customOptions = {}) {
         */
 
         if (!options.host) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'host\' value: \'' + options.host + '\'. Host can\'t be empty.')
+            result.stackTrace.push(me + ': ' + 'Error: Incorrect option \'host\' value: \'' + options.host + '\'. Host can\'t be empty.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -160,7 +170,7 @@ toolslight.wsConnect = function(customOptions = {}) {
         }
 
         if (options.port < 0 || options.port > 65536) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'port\' value: \'' + options.port + '\'. This option can\'t be less than 0 and more than 65536.')
+            result.stackTrace.push(me + ': ' + 'Error: Incorrect option \'port\' value: \'' + options.port + '\'. This option can\'t be less than 0 and more than 65536.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -170,7 +180,7 @@ toolslight.wsConnect = function(customOptions = {}) {
         }
 
         if (options.proxy.host && (options.proxy.port < 0 || options.proxy.port > 65536)) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'proxy.port\' value: \'' + options.proxy.port + '\'. This option can\'t be less than 0 and more than 65536.')
+            result.stackTrace.push(me + ': ' + 'Error: Incorrect option \'proxy.port\' value: \'' + options.proxy.port + '\'. This option can\'t be less than 0 and more than 65536.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -180,7 +190,7 @@ toolslight.wsConnect = function(customOptions = {}) {
         }
 
         if (options.proxy.host && !options.proxy.username && options.proxy.password) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'proxy.username\' value: \'' + options.proxy.username + '\'. Proxy username must set, if you set proxy password.')
+            result.stackTrace.push(me + ': ' + 'Error: Incorrect option \'proxy.username\' value: \'' + options.proxy.username + '\'. Proxy username must set, if you set proxy password.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
@@ -190,7 +200,7 @@ toolslight.wsConnect = function(customOptions = {}) {
         }
 
         if (options.proxy.host && !options.proxy.password && options.proxy.username) {
-            result.stackTrace.push((options.initiator ? options.initiator + ': ' : '') + me + ': ' + 'Error: Incorrect option \'proxy.password\' value: \'' + options.proxy.password + '\'. Proxy password must set, if you set proxy username.')
+            result.stackTrace.push(me + ': ' + 'Error: Incorrect option \'proxy.password\' value: \'' + options.proxy.password + '\'. Proxy password must set, if you set proxy username.')
             result.error = {
                 code: 'INCORRECT_OPTION_VALUE',
                 message: result.stackTrace[result.stackTrace.length - 1]
