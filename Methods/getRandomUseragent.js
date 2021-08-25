@@ -2,7 +2,7 @@ const toolslight = require('../index.js')
 
 /*
     Example:
-    console.log(toolslight.getRandomUseragent().data) // Returns string: random browser useragent.
+    console.log(toolslight.getRandomUseragent().data) // Returns string: random browser useragent
 */
 
 toolslight.getRandomUseragent = function(customOptions = {}) {

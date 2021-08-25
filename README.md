@@ -21,6 +21,7 @@ Also, this package uses only native nodejs modules (except `socks-proxy-agent` a
 - [getMyEachIPv6](#toolslightgetmyeachipv6)
 - [getMyIPv4](#toolslightgetmyipv4)
 - [getMyIPv6](#toolslightgetmyipv6)
+- [getRandomUseragent](#toolslightgetrandomuseragent)
 - [getSecond](#toolslightgetsecond)
 - [getTs](#toolslightgetts)
 - [getYear](#toolslightgetyear)
@@ -294,6 +295,14 @@ console.log(toolslight.getMyIPv6(['ens3', 'lo']).data) // Returns string: last f
 
 Description:
 Use `console.log(require('os').networkInterfaces())` if you want to show all your network interfaces.
+
+[back to top](#table-of-contents)
+
+## toolslight.getRandomUseragent
+Example:
+```js
+console.log(toolslight.getRandomUseragent().data) // Returns string: random browser useragent
+```
 
 [back to top](#table-of-contents)
 
