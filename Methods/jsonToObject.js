@@ -7,7 +7,7 @@ const toolslight = require('../index.js')
 */
 
 toolslight.jsonToObject = function(customOptions = {}) {
-    let me = 'toolslight.isProxyAvailable'
+    let me = 'toolslight.jsonToObject'
 
     /*
         PREPARE:
@@ -35,8 +35,6 @@ toolslight.jsonToObject = function(customOptions = {}) {
         name: 'json',
         position: 1
     }
-
-    me = (customOptions.initiator && Object.prototype.toString.call(customOptions.initiator) === '[object String]') ? customOptions.initiator + '->' + me : me
 
     me = (customOptions.initiator && Object.prototype.toString.call(customOptions.initiator) === '[object String]') ? customOptions.initiator + '->' + me : me
 
