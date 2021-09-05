@@ -501,7 +501,7 @@ toolslight.httpRequest = function(customOptions = {}) {
 
         request.on('timeout', () => {
             request.destroy()
-            result.stackTrace.push(me + ': ' + 'Error: Request aborted cause trying to connection with host take more than \'' + options.connectionTimeout + '\' ms, request didn\'t send. You can increase timeout in option \'timeout\'.')
+            result.stackTrace.push(me + ': ' + 'Error: Request aborted cause trying to connection with host take more than \'' + options.connectionTimeout + '\' ms, request didn\'t send. You can increase timeout in option \'connectionTimeout\'.')
             result.error = {
                 code: 'HOST_CONNECTION_TIMEOUT',
                 message: result.stackTrace[result.stackTrace.length - 1]
