@@ -353,9 +353,7 @@ toolslight.httpRequest = function(customOptions = {}) {
 
         let tmpHeaders = {}
         for (let headerName in options.headers) {
-            let headerValue = options.headers[headerName]
-            headerName = headerName.toLowerCase()
-            tmpHeaders[headerName] = headerValue
+            tmpHeaders[headerName.toLowerCase()] = options.headers[headerName]
         }
         options.headers = { ...tmpHeaders }
 

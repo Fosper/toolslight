@@ -119,7 +119,7 @@ toolslight.isProxyAvailable = function(customOptions = {}) {
         if (options.username && options.password) {
             proxyOptions.auth = options.username + ':' + options.password
         }
-
+        
         let proxyAgent = new proxyLibrary(proxyOptions)
         proxyAgent.timeout = options.timeout
 
