@@ -1,4 +1,4 @@
-
+const { SocksProxyAgent } = require('socks-proxy-agent')
 const toolslight = require('../index.js')
 
 /*
@@ -100,7 +100,7 @@ toolslight.isProxyAvailable = function(customOptions = {}) {
         let endpointHost = 'google.com'
 
         let requestLibrary = options.endpointProtocol === 'http' ? require('http') : require('https')
-        let proxyLibrary = options.protocol === 'socks' ? require('socks-proxy-agent') : options.endpointProtocol === 'https' ? require('https-proxy-agent') : require('http-proxy-agent')
+        let proxyLibrary = options.protocol === 'socks' ? SocksProxyAgent : options.endpointProtocol === 'https' ? require('https-proxy-agent') : require('http-proxy-agent')
 
         let proxyOptions = {
             protocol: options.protocol + ':',
@@ -119,7 +119,7 @@ toolslight.isProxyAvailable = function(customOptions = {}) {
         if (options.username && options.password) {
             proxyOptions.auth = options.username + ':' + options.password
         }
-        
+
         let proxyAgent = new proxyLibrary(proxyOptions)
         proxyAgent.timeout = options.timeout
 

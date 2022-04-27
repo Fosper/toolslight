@@ -1,3 +1,4 @@
+const { SocksProxyAgent } = require('socks-proxy-agent')
 const toolslight = require('../index.js')
 const { Readable } = require('stream')
 const { createBrotliDecompress, createGunzip, createInflate } = require('zlib')
@@ -392,7 +393,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         data.response.bodySavedTo = options.responseBodySaveTo
 
         if (options.proxy.host && options.proxy.protocol === 'socks') {
-            let proxyLibrary = require('socks-proxy-agent')
+            let proxyLibrary = SocksProxyAgent
 
             let proxyOptions = require('url').parse(options.proxy.protocol + '://' + options.proxy.host + ':' + options.proxy.port + '/')
             if (options.proxy.username && options.proxy.password) {
