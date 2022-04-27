@@ -24,9 +24,9 @@
   },
   "homepage": "https://github.com/fosper/toolslight#readme",
   "dependencies": {
-    "http-proxy-agent": "^4.0.1",
-    "https-proxy-agent": "^5.0.0",
-    "socks-proxy-agent": "^6.0.0",
-    "ws": "^7.5.3"
+    "http-proxy-agent": "^5.0.0",
+    "https-proxy-agent": "^5.0.1",
+    "socks-proxy-agent": "^6.2.0",
+    "ws": "^8.5.0"
   }
 }
