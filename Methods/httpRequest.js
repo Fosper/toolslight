@@ -13,7 +13,7 @@ const { existsSync, appendFileSync, unlinkSync } = require('fs')
         host: 'google.com',
         port: 443,
         path: '/',
-        headers: {'Content-Type': 'text/plain', 'User-Agent': 'Mozilla/5.0'},
+        headers: {'content-type': 'text/plain', 'User-Agent': 'Mozilla/5.0'},
         body: '',
         bodyFormData: {},
         connectionTimeout: 5000,
@@ -371,14 +371,14 @@ toolslight.httpRequest = function(customOptions = {}) {
         }
 
         if (Object.keys(options.bodyFormData).length) {
-            requestOptions.headers['Content-Type'] = 'multipart/form-data; boundary=' + boundary
-        } else if (options.body instanceof Readable && !requestOptions.headers['Content-Type']) {
+            requestOptions.headers['content-type'] = 'multipart/form-data; boundary=' + boundary
+        } else if (options.body instanceof Readable && !requestOptions.headers['content-type']) {
             let fileName = options.body.path.split('/')[options.body.path.split('/').length - 1]
             let fileExt = fileName.split('.')[1]
             if (fileExt && mimeTypes[fileExt]) {
-                requestOptions.headers['Content-Type'] = mimeTypes[fileExt]
+                requestOptions.headers['content-type'] = mimeTypes[fileExt]
             } else {
-                requestOptions.headers['Content-Type'] = mimeTypes.txt
+                requestOptions.headers['content-type'] = mimeTypes.txt
             }
         }
 
@@ -619,7 +619,7 @@ toolslight.httpRequest = function(customOptions = {}) {
                             bodyHeadContentType = mimeTypes.txt
                         }
                         bodyHead += 'Content-Disposition: form-data; name="' + formDataName + '"; filename="' + formDataValue.path.split('/')[formDataValue.path.split('/').length - 1] + '"' + '\r\n'
-                        bodyHead += 'Content-Type: ' + bodyHeadContentType + '\r\n\r\n'
+                        bodyHead += 'content-type: ' + bodyHeadContentType + '\r\n\r\n'
                     }
                     let bodyHeadStream = Readable.from(Buffer.from(bodyHead.toString()))
         
