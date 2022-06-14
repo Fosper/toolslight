@@ -1,3 +1,4 @@
+const { SocksProxyAgent } = require('socks-proxy-agent')
 const toolslight = require('../index.js')
 const websocket = require('ws')
 
@@ -220,7 +221,7 @@ toolslight.wsConnect = function(customOptions = {}) {
         }
 
         if (options.proxy.host) {
-            let proxyLibrary = require('socks-proxy-agent')
+            let proxyLibrary = SocksProxyAgent
 
             let proxyOptions = require('url').parse(options.proxy.protocol + '://' + options.proxy.host + ':' + options.proxy.port + '/')
             if (options.proxy.username && options.proxy.password) {
