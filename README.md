@@ -31,6 +31,7 @@ Also, this package uses only native nodejs modules (except `socks-proxy-agent` a
 - [isProxyAvailable](#toolslightisproxyavailable)
 - [jsonToObject](#toolslightjsontoobject)
 - [randInt](#toolslightrandint)
+- [readFileSync](#toolslightreadfilesync)
 - [sleep](#toolslightsleep)
 - [uniqid](#toolslightuniqid)
 
@@ -478,6 +479,13 @@ Example:
 ```js
 console.log(toolslight.randInt().data) // Returns number: from 0 to 1
 console.log(toolslight.randInt({from: 1, to: 10}).data) // Returns number: from 1 to 10 (includes 1 and 10)
+```
+
+## toolslight.readFileSync
+Example:
+```js
+console.log(toolslight.readFileSync('/srv/project/file.txt').data) // Returns string: data of file
+console.log(toolslight.readFileSync({initiator: 'Parent', file: '/srv/project/file.txt', encode: 'utf-8'}).data) // Returns string: data of file
 ```
 
 ## toolslight.sleep
