@@ -68,7 +68,7 @@ toolslight.readFileSync = function(customOptions = {}) {
         resolve(fileData)
     } catch (e) {
         result.error = {
-            code: 'FILE_NOT_EXISTS',
+            code: 'INCORRECT_FILE_PATH',
             message: `File not exists by path: ${options.file}`
         }
         resolve(result)
