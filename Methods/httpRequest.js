@@ -609,20 +609,29 @@ toolslight.httpRequest = function(customOptions = {}) {
                     }
                     bodyHead += '--' + boundary + '\r\n'
         
+
+                    let bodyHeadStream
                     if (typeof(formDataValue) !== 'object') {
-                        bodyHead += 'Content-Disposition: form-data; name="' + formDataName + '"' + '\r\n\r\n'
+                        if (formDataName === `metadata`) {
+                            bodyHead += 'Content-Disposition: form-data; name="metadata"' + '\r\n' + 
+                            `Content-Type: application/json; charset=UTF-8\r\n\r\n`
+                        } else {
+                            bodyHead += 'Content-Disposition: form-data; name="' + formDataName + '"' + '\r\n\r\n'
+                        }
                     } else {
                         let fileName = formDataValue.path.split('/')[formDataValue.path.split('/').length - 1]
                         let fileExt = fileName.split('.')
+                        if (fileExt.length > 1) fileExt = fileExt[1]
                         let bodyHeadContentType = mimeTypes[fileExt]
                         if (!bodyHeadContentType) {
                             bodyHeadContentType = mimeTypes.txt
                         }
                         bodyHead += 'Content-Disposition: form-data; name="' + formDataName + '"; filename="' + formDataValue.path.split('/')[formDataValue.path.split('/').length - 1] + '"' + '\r\n'
-                        bodyHead += 'content-type: ' + bodyHeadContentType + '\r\n\r\n'
+                        bodyHead += 'Content-Type: ' + bodyHeadContentType + '\r\n\r\n'
                     }
-                    let bodyHeadStream = Readable.from(Buffer.from(bodyHead.toString()))
-                    
+
+                    bodyHeadStream = Readable.from(Buffer.from(bodyHead.toString()))
+
                     bodyHeadStream.on('end', () => {
         
                         /*
@@ -665,14 +674,14 @@ toolslight.httpRequest = function(customOptions = {}) {
                             BODY DATA SEND STREAM:
                         */
         
-                        bodyDataStream.pipe(writeStream, {end: false})
+                        bodyDataStream.pipe(writeStream, { end: false })
                     })
         
                     /*
                         BODY HEADER SEND STREAM:
                     */
         
-                    bodyHeadStream.pipe(writeStream, {end: false})
+                    bodyHeadStream.pipe(writeStream, { end: false })
                 })
             }
 
@@ -685,6 +694,9 @@ toolslight.httpRequest = function(customOptions = {}) {
                 let formDataValue = data.request.bodyFormData[formDataName]
                 if (formDataValue === undefined) {
                     formDataValue = ''
+                }
+                if (formDataName === `metadata`) {
+                    formDataValue = JSON.stringify(formDataValue)
                 }
                 await sendBodySync(boundary, formDataName, formDataValue, isStart, isEnd, request)
             }
