@@ -310,6 +310,7 @@ toolslight.httpRequest = function(customOptions = {}) {
             webm: 'video/webm',
             flv: 'video/x-flv',
             avi: 'video/x-msvideo',
+            sql: 'application/sql',
             '3gpp': 'video/3gpp',
             '3gp': 'video/3gpp',
             '3gpp2': 'video/3gpp2',
