@@ -2,6 +2,8 @@ const { SocksProxyAgent } = require('socks-proxy-agent')
 const toolslight = require('../index.js')
 const { Readable } = require('stream')
 const { createBrotliDecompress, createGunzip, createInflate } = require('zlib')
+const decompressBrotli = require('brotli/decompress')
+const pako = require('pako')
 const { existsSync, appendFileSync, unlinkSync } = require('fs')
 
 /*
@@ -412,23 +414,30 @@ toolslight.httpRequest = function(customOptions = {}) {
             if (options.proxy.connectionTimeout > 0) requestOptions.agent.timeout = options.proxy.connectionTimeout
         }
 
+        let br, gzip, deflate = false
         let request = requestLibrary.request(requestOptions, (res) => {
             let output
             switch (res.headers['content-encoding']) {
                 case 'br':
-                    let br = createBrotliDecompress()
-                    res.pipe(br)
-                    output = br
+                    br = true
+                    // let br = createBrotliDecompress()
+                    // res.pipe(br)
+                    // output = br
+                    output = res
                     break
                 case 'gzip':
-                    let gzip = createGunzip()
-                    res.pipe(gzip)
-                    output = gzip
+                    gzip = true
+                    // let gzip = createGunzip()
+                    // res.pipe(gzip)
+                    // output = gzip
+                    output = res
                     break
                 case 'deflate':
-                    let deflate = createInflate()
-                    res.pipe(deflate)
-                    output = deflate
+                    deflate = true
+                    // let deflate = createInflate()
+                    // res.pipe(deflate)
+                    // output = deflate
+                    output = res
                     break
                 default:
                     output = res
@@ -486,7 +495,15 @@ toolslight.httpRequest = function(customOptions = {}) {
                 clearTimeout(globalTimeout)
                 request.destroy()
                 if (!data.response.bodySavedTo) {
-                    data.response.body = Buffer.concat(data.response.body)
+                    if (br) {
+                        data.response.body = decompressBrotli(Buffer.concat(data.response.body))
+                    } else if (gzip) {
+                        data.response.body = pako.ungzip(Buffer.concat(data.response.body))
+                    } else if (deflate) {
+                        data.response.body = pako.inflate(Buffer.concat(data.response.body))
+                    } else {
+                        data.response.body = Buffer.concat(data.response.body)
+                    }
                 } else {
                     data.response.body = ''
                 }
