@@ -45,6 +45,10 @@ npm i toolslight
 
 In code:
 ```js
+import toolslight from 'toolslight'
+```
+OR
+```js
 const toolslight = require('toolslight')
 ```
 
