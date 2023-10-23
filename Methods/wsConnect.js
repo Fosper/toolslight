@@ -90,7 +90,7 @@ toolslight.wsConnect = function(customOptions = {}) {
             port: 8080,
             username: '',
             password: '',
-            connectionTimeout: 5000
+            connectionTimeout: 0
         },
         localAddress: '',
         globalTimeout: 0
@@ -242,7 +242,7 @@ toolslight.wsConnect = function(customOptions = {}) {
                 ? `${encodeURIComponent(options.proxy.username)}:${encodeURIComponent(options.proxy.password)}@`
                 : ``
             requestOptions.agent = new SocksProxyAgent(`socks://${authString}${options.proxy.host}:${options.proxy.port}`)
-            if (options.proxy.connectionTimeout) requestOptions.agent.timeout = options.proxy.connectionTimeout
+            if (options.proxy.connectionTimeout > 0) requestOptions.agent.timeout = options.proxy.connectionTimeout
         }
 
         if (options.localAddress) {
