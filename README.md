@@ -34,6 +34,7 @@ Also, this package uses only native nodejs modules (except `socks-proxy-agent` a
 - [readFileSync](#toolslightreadfilesync)
 - [sleep](#toolslightsleep)
 - [uniqid](#toolslightuniqid)
+- [wsConnect](#toolslightwsconnect)
 
 # Install
 
@@ -519,6 +520,70 @@ console.log(toolslight.uniqid({
     specialEnable: false,
     customEnable: false
 }).data) // Returns string: random 13 characters with 'a-z' and '0-9' and 'A-Z'
+```
+
+[back to top](#table-of-contents)
+
+## toolslight.wsConnect
+Example (through await):
+```js
+let wsConnect = await toolslight.wsConnect({
+    initiator: '',
+    protocol: 'wss', // Only 'ws' or 'wss'.
+    host: 'google.com',
+    port: 8443,
+    path: '/',
+    headers: {'Content-Type': 'text/plain', 'User-Agent': 'Mozilla/5.0'},
+    connectionTimeout: 5000,
+    responseBodySizeLimit: 1024 * 1024 * 1024, // 1Gb.
+    proxy: {
+        protocol: 'socks', // Only 'socks' supported.
+        host: '',
+        port: 8080,
+        username: '',
+        password: '',
+        connectionTimeout: 5000
+    },
+    localAddress: '',
+    globalTimeout: 30000
+})
+wsConnect.on('open', async () => {
+    wsConnect.send('Client: ws connected.');
+})
+wsConnect.on('message', async (data) => {
+    console.log('Client: incoming message from server: ', data)
+})
+```
+
+Example (through then):
+```js
+toolslight.wsConnect({
+    initiator: '',
+    protocol: 'wss', // Only 'ws' or 'wss'.
+    host: 'google.com',
+    port: 8443,
+    path: '/',
+    headers: {'Content-Type': 'text/plain', 'User-Agent': 'Mozilla/5.0'},
+    connectionTimeout: 5000,
+    responseBodySizeLimit: 1024 * 1024 * 1024, // 1Gb.
+    proxy: {
+        protocol: 'socks', // Only 'socks' supported.
+        host: '',
+        port: 8080,
+        username: '',
+        password: '',
+        connectionTimeout: 5000
+    },
+    localAddress: '',
+    globalTimeout: 30000
+}).then((wsConnect) => {
+    wsConnect.on('open', async () => {
+        wsConnect.send('Client: ws connected.');
+    })
+    wsConnect.on('message', async (data) => {
+        console.log('Client: incoming message from server: ', data)
+    })
+})
 ```
 
 [back to top](#table-of-contents)

@@ -51,7 +51,14 @@ const websocket = require('ws')
         },
         localAddress: '',
         globalTimeout: 30000
-    }).then((result) => {})
+    }).then((wsConnect) => {
+        wsConnect.on('open', async () => {
+            wsConnect.send('Client: ws connected.');
+        })
+        wsConnect.on('message', async (data) => {
+            console.log('Client: incoming message from server: ', data)
+        })
+    })
 */
 
 toolslight.wsConnect = function(customOptions = {}) {
@@ -221,16 +228,21 @@ toolslight.wsConnect = function(customOptions = {}) {
         }
 
         if (options.proxy.host) {
-            let proxyLibrary = SocksProxyAgent
+            // let proxyLibrary = SocksProxyAgent
 
-            let proxyOptions = require('url').parse(options.proxy.protocol + '://' + options.proxy.host + ':' + options.proxy.port + '/')
-            if (options.proxy.username && options.proxy.password) {
-                proxyOptions.auth = options.proxy.username + ':' + options.proxy.password
-            }
+            // let proxyOptions = require('url').parse(options.proxy.protocol + '://' + options.proxy.host + ':' + options.proxy.port + '/')
+            // if (options.proxy.username && options.proxy.password) {
+            //     proxyOptions.auth = options.proxy.username + ':' + options.proxy.password
+            // }
 
-            let proxyAgent = new proxyLibrary(proxyOptions)
-            proxyAgent.timeout = options.proxy.connectionTimeout
-            requestOptions.agent = proxyAgent
+            // let proxyAgent = new proxyLibrary(proxyOptions)
+            // proxyAgent.timeout = options.proxy.connectionTimeout
+            // requestOptions.agent = proxyAgent
+            const authString = options.proxy.username && options.proxy.password
+                ? `${encodeURIComponent(options.proxy.username)}:${encodeURIComponent(options.proxy.password)}@`
+                : ``
+            requestOptions.agent = new SocksProxyAgent(`socks://${authString}${options.proxy.host}:${options.proxy.port}`)
+            requestOptions.agent.timeout = options.proxy.connectionTimeout
         }
 
         if (options.localAddress) {
