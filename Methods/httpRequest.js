@@ -89,6 +89,7 @@ toolslight.httpRequest = function(customOptions = {}) {
         connectionTimeout: 10000,
         responseBodySizeLimit: 1024 * 1024 * 1024, // 1Gb
         responseBodySaveTo: '',
+        decompress: true,
         proxy: {
             protocol: 'socks',
             host: '',
@@ -117,6 +118,7 @@ toolslight.httpRequest = function(customOptions = {}) {
 
         responseBodySizeLimit: ['[object Number]'],
         responseBodySaveTo: ['[object String]'],
+        decompress: ['[object Boolean]'],
 
         proxy: {
             type: ['[object String]'],
@@ -495,12 +497,16 @@ toolslight.httpRequest = function(customOptions = {}) {
                 clearTimeout(globalTimeout)
                 request.destroy()
                 if (!data.response.bodySavedTo) {
-                    if (br) {
-                        data.response.body = decompressBrotli(Buffer.concat(data.response.body))
-                    } else if (gzip) {
-                        data.response.body = pako.ungzip(Buffer.concat(data.response.body))
-                    } else if (deflate) {
-                        data.response.body = pako.inflate(Buffer.concat(data.response.body))
+                    if (options.decompress) {
+                        if (br) {
+                            data.response.body = decompressBrotli(Buffer.concat(data.response.body))
+                        } else if (gzip) {
+                            data.response.body = pako.ungzip(Buffer.concat(data.response.body))
+                        } else if (deflate) {
+                            data.response.body = pako.inflate(Buffer.concat(data.response.body))
+                        } else {
+                            data.response.body = Buffer.concat(data.response.body)
+                        }
                     } else {
                         data.response.body = Buffer.concat(data.response.body)
                     }
