@@ -582,6 +582,7 @@ toolslight.httpRequest = function(customOptions = {}) {
                         message: result.stackTrace[result.stackTrace.length - 1]
                     }
                     break
+                case 'Proxy connection timed out':
                 case 'A "socket" was not created for HTTP request before':
                     result.stackTrace.push(me + ': ' + 'Error: Request aborted cause trying to connection with proxy take more than \'' + options.proxy.connectionTimeout + '\' ms, request didn\'t send. You can increase timeout in option \'proxy.connectionTimeout\'.')
                     result.error = {
